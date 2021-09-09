@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, createContext } from 'react';
 import { Outlet } from 'react-router-dom';
+import { Skeleton } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { firebase } from 'src/App';
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
 
@@ -38,8 +41,26 @@ const DashboardLayoutContent = styled('div')({
   overflow: 'auto'
 });
 
+export const DashboardContext = createContext({});
+
 const DashboardLayout = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
+  const [events, loading] = useCollectionData(firebase.firestore().collection('events'),
+    {
+      idField: 'eventID',
+      transform: (data) => {
+        const roles = data.roles.map((roleRef) => roleRef.get().then((r) => ({
+          roleId: r.id,
+          ...r.data()
+        })));
+
+        return {
+          ...data,
+          roles,
+        };
+      },
+      snapshotListenOptions: { includeMetadataChanges: true },
+    });
 
   return (
     <DashboardLayoutRoot>
@@ -51,7 +72,19 @@ const DashboardLayout = () => {
       <DashboardLayoutWrapper>
         <DashboardLayoutContainer>
           <DashboardLayoutContent>
-            <Outlet />
+            <DashboardContext.Provider value={{ events }}>
+              {
+                loading
+                  ? (
+                    <>
+                      <Skeleton />
+                      <Skeleton animation={false} />
+                      <Skeleton animation="wave" />
+                    </>
+                  )
+                  : <Outlet />
+              }
+            </DashboardContext.Provider>
           </DashboardLayoutContent>
         </DashboardLayoutContainer>
       </DashboardLayoutWrapper>
