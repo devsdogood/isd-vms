@@ -6,7 +6,9 @@ import CustomerList from './pages/CustomerList';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
-import ProductList from './pages/ProductList';
+import EventList from './pages/EventList';
+import EventView from './pages/EventView';
+import NewEvent from './pages/NewEvent';
 import Register from './pages/Register';
 import Settings from './pages/Settings';
 
@@ -18,7 +20,9 @@ const routes = [
       { path: 'account', element: <Account /> },
       { path: 'customers', element: <CustomerList /> },
       { path: 'dashboard', element: <Dashboard /> },
-      { path: 'products', element: <ProductList /> },
+      { path: 'events', element: <EventList /> },
+      { path: 'events/:event', element: <EventView /> },
+      { path: 'events/new', element: <NewEvent /> },
       { path: 'settings', element: <Settings /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]

@@ -16,7 +16,7 @@ import {
   BarChart as BarChartIcon,
   Lock as LockIcon,
   Settings as SettingsIcon,
-  ShoppingBag as ShoppingBagIcon,
+  Activity as ActivityIcon,
   User as UserIcon,
   UserPlus as UserPlusIcon,
   Users as UsersIcon
@@ -41,9 +41,9 @@ const items = [
     title: 'Customers'
   },
   {
-    href: '/app/products',
-    icon: ShoppingBagIcon,
-    title: 'Products'
+    href: '/app/events',
+    icon: ActivityIcon,
+    title: 'Events'
   },
   {
     href: '/app/account',

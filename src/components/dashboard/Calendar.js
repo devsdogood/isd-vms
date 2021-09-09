@@ -21,7 +21,7 @@ const EventCalendar = ({ events }) => {
   }, [events]);
 
   const eventOpened = (event) => {
-    navigate(`/events/${event.id}`);
+    navigate(`/app/events/${event.eventID}`);
   };
 
   const eventStyleGetter = (event) => {
@@ -48,7 +48,6 @@ const EventCalendar = ({ events }) => {
         defaultView="week"
         startAccessor="start"
         endAccessor="end"
-        style={{ height: '90vh' }}
         onSelectEvent={eventOpened}
         views={['day', 'week', 'month']}
         eventPropGetter={(eventStyleGetter)}
