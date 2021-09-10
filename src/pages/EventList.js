@@ -7,8 +7,8 @@ import {
   Grid
 } from '@material-ui/core';
 import { DashboardContext } from 'src/components/DashboardLayout';
-import ProductListToolbar from '../components/product/ProductListToolbar';
-import EventCard from '../components/product/EventCard';
+import ProductListToolbar from '../components/event/ProductListToolbar';
+import EventCard from '../components/event/EventCard';
 
 const ProductList = () => {
   const { events } = useContext(DashboardContext);

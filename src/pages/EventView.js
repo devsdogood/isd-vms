@@ -1,5 +1,7 @@
+import EventForm from 'src/components/event/EventForm';
+
 const EventView = () => (
-  <div>Event!</div>
+  <EventForm />
 );
 
 export default EventView;

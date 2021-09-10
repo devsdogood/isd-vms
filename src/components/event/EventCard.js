@@ -20,8 +20,8 @@ const EventCard = ({ event, ...rest }) => {
     minute: '2-digit',
   };
 
-  const end = event.end.toDate().toLocaleString([], dateOptions);
-  const start = event.start.toDate().toLocaleString([], dateOptions);
+  const end = event.end.toLocaleString([], dateOptions);
+  const start = event.start.toLocaleString([], dateOptions);
 
   return (
     <Card

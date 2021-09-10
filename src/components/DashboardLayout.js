@@ -45,20 +45,19 @@ export const DashboardContext = createContext({});
 
 const DashboardLayout = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-  const [events, loading] = useCollectionData(firebase.firestore().collection('events'),
+  const [events, eventsLoading] = useCollectionData(firebase.firestore().collection('events'),
     {
       idField: 'eventID',
-      transform: (data) => {
-        const roles = data.roles.map((roleRef) => roleRef.get().then((r) => ({
-          roleId: r.id,
-          ...r.data()
-        })));
-
-        return {
-          ...data,
-          roles,
-        };
-      },
+      transform: (data) => ({
+        ...data,
+        start: data.start.toDate(),
+        end: data.end.toDate(),
+      }),
+      snapshotListenOptions: { includeMetadataChanges: true },
+    });
+  const [roles, rolesLoading] = useCollectionData(firebase.firestore().collection('roles'),
+    {
+      idField: 'roleID',
       snapshotListenOptions: { includeMetadataChanges: true },
     });
 
@@ -72,9 +71,9 @@ const DashboardLayout = () => {
       <DashboardLayoutWrapper>
         <DashboardLayoutContainer>
           <DashboardLayoutContent>
-            <DashboardContext.Provider value={{ events }}>
+            <DashboardContext.Provider value={{ events, roles }}>
               {
-                loading
+                eventsLoading || rolesLoading
                   ? (
                     <>
                       <Skeleton />
