@@ -105,8 +105,8 @@ const EventForm = () => {
     <FormikProvider value={formik}>
       <Card>
         <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
+          subheader="Edit information about the event"
+          title="Event Details"
         />
         <Divider />
         <CardContent>
