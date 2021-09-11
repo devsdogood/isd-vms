@@ -92,19 +92,15 @@ const EventForm = () => {
         start: new Date(values.start),
         end: new Date(values.end),
       };
-      console.log(firestoreRoles);
 
       try {
         await firebase.firestore().collection('events').doc(values.eventID).set(firestoreVals);
       } catch (err) {
-        console.log(err);
         setErrors(err);
       }
     },
     enableReinitialize: true,
   });
-  console.log(formik.errors);
-  console.log(formik.values);
 
   return (
     <FormikProvider value={formik}>
