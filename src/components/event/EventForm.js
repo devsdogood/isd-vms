@@ -13,6 +13,7 @@ import {
   TextField as MuiTextField,
   Autocomplete
 } from '@material-ui/core';
+import { useNavigate } from 'react-router';
 import equal from 'deep-equal';
 import { DashboardContext } from 'src/components/DashboardLayout';
 import { firebase } from '../../App';
@@ -65,18 +66,19 @@ const validationSchema = yup.object({
 
 const EventForm = ({ event }) => {
   const { roles } = useContext(DashboardContext);
-  const dateFormat = 'yyyy-MM-DDThh:mm';
+  const navigate = useNavigate();
+  const dateFormat = 'yyyy-MM-DDTHH:mm';
 
   const formik = useFormik({
     initialValues: (() => {
-      const evRoles = event.roles.map((r) => ({
+      const evRoles = event?.roles?.map((r) => ({
         title: roles.find((ro) => ro.roleID === r.id).title,
         roleID: r.id
       }));
       return {
         ...event,
-        start: moment(event.start).format(dateFormat),
-        end: moment(event.end).format(dateFormat),
+        start: moment(event?.start).format(dateFormat),
+        end: moment(event?.end).format(dateFormat),
         roles: evRoles,
       };
     })(),
@@ -92,6 +94,8 @@ const EventForm = ({ event }) => {
 
       try {
         await firebase.firestore().collection('events').doc(values.eventID).set(firestoreVals);
+
+        if (!event.eventID) navigate('/app/events/');
       } catch (err) {
         setErrors(err);
       }
