@@ -8,8 +8,9 @@ import {
   SvgIcon
 } from '@material-ui/core';
 import { Search as SearchIcon } from 'react-feather';
+import { Link } from 'react-router-dom';
 
-const ProductListToolbar = (props) => (
+const EventListToolbar = (props) => (
   <Box {...props}>
     <Box
       sx={{
@@ -17,17 +18,13 @@ const ProductListToolbar = (props) => (
         justifyContent: 'flex-end'
       }}
     >
-      <Button>
-        Import
-      </Button>
-      <Button sx={{ mx: 1 }}>
-        Export
-      </Button>
       <Button
+        component={Link}
+        to="/app/events/new"
         color="primary"
         variant="contained"
       >
-        Add product
+        Add event
       </Button>
     </Box>
     <Box sx={{ mt: 3 }}>
@@ -48,7 +45,7 @@ const ProductListToolbar = (props) => (
                   </InputAdornment>
                 )
               }}
-              placeholder="Search product"
+              placeholder="Search event"
               variant="outlined"
             />
           </Box>
@@ -58,4 +55,4 @@ const ProductListToolbar = (props) => (
   </Box>
 );
 
-export default ProductListToolbar;
+export default EventListToolbar;

@@ -7,10 +7,10 @@ import {
   Grid
 } from '@material-ui/core';
 import { DashboardContext } from 'src/components/DashboardLayout';
-import ProductListToolbar from '../components/event/ProductListToolbar';
+import EventListToolbar from '../components/event/EventListToolbar';
 import EventCard from '../components/event/EventCard';
 
-const ProductList = () => {
+const EventList = () => {
   const { events } = useContext(DashboardContext);
 
   return (
@@ -26,7 +26,7 @@ const ProductList = () => {
         }}
       >
         <Container maxWidth={false}>
-          <ProductListToolbar />
+          <EventListToolbar />
           <Box sx={{ pt: 3 }}>
             <Grid
               container
@@ -53,4 +53,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default EventList;
