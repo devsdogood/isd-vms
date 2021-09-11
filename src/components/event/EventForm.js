@@ -67,6 +67,7 @@ const validationSchema = yup.object({
 const EventForm = () => {
   const { events, roles } = useContext(DashboardContext);
   const { event } = useParams();
+  const dateFormat = 'yyyy-MM-DDThh:mm';
 
   const formik = useFormik({
     initialValues: (() => {
@@ -77,8 +78,8 @@ const EventForm = () => {
       }));
       return {
         ...ev,
-        start: moment(ev.start).format('YYYY-MM-DDTHH:mm:SS'),
-        end: moment(ev.end).format('YYYY-MM-DDTHH:mm:SS'),
+        start: moment(ev.start).format(dateFormat),
+        end: moment(ev.end).format(dateFormat),
         roles: evRoles,
       };
     })(),
