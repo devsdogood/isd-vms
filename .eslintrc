@@ -20,6 +20,9 @@
       }
     }
   },
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
   "rules": {
     "comma-dangle": "off",
     "jsx-a11y/anchor-is-valid": "off",
