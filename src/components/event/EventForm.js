@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import moment from 'moment';
 import { useFormik, FormikProvider } from 'formik';
@@ -64,22 +63,20 @@ const validationSchema = yup.object({
     .required('Title is required')
 });
 
-const EventForm = () => {
-  const { events, roles } = useContext(DashboardContext);
-  const { event } = useParams();
+const EventForm = ({ event }) => {
+  const { roles } = useContext(DashboardContext);
   const dateFormat = 'yyyy-MM-DDThh:mm';
 
   const formik = useFormik({
     initialValues: (() => {
-      const ev = events.find((e) => e.eventID === event);
-      const evRoles = ev.roles.map((r) => ({
+      const evRoles = event.roles.map((r) => ({
         title: roles.find((ro) => ro.roleID === r.id).title,
         roleID: r.id
       }));
       return {
-        ...ev,
-        start: moment(ev.start).format(dateFormat),
-        end: moment(ev.end).format(dateFormat),
+        ...event,
+        start: moment(event.start).format(dateFormat),
+        end: moment(event.end).format(dateFormat),
         roles: evRoles,
       };
     })(),

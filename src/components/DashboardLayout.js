@@ -60,6 +60,20 @@ const DashboardLayout = () => {
       idField: 'roleID',
       snapshotListenOptions: { includeMetadataChanges: true },
     });
+  const [eventSignups, eventSignupsLoading] = useCollectionData(firebase.firestore().collection('eventSignups'),
+    {
+      idField: 'signupID',
+      transform: (data) => ({
+        ...data,
+        registered: data.registered.toDate(),
+      }),
+      snapshotListenOptions: { includeMetadataChanges: true },
+    });
+  const [users, usersLoading] = useCollectionData(firebase.firestore().collection('users'),
+    {
+      idField: 'userID',
+      snapshotListenOptions: { includeMetadataChanges: true },
+    });
 
   return (
     <DashboardLayoutRoot>
@@ -71,9 +85,12 @@ const DashboardLayout = () => {
       <DashboardLayoutWrapper>
         <DashboardLayoutContainer>
           <DashboardLayoutContent>
-            <DashboardContext.Provider value={{ events, roles }}>
+            <DashboardContext.Provider value={{
+              events, roles, eventSignups, users
+            }}
+            >
               {
-                eventsLoading || rolesLoading
+                eventsLoading || rolesLoading || eventSignupsLoading || usersLoading
                   ? (
                     <>
                       <Skeleton />
