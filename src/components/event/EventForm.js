@@ -92,15 +92,19 @@ const EventForm = () => {
         start: new Date(values.start),
         end: new Date(values.end),
       };
+      console.log(firestoreRoles);
 
       try {
         await firebase.firestore().collection('events').doc(values.eventID).set(firestoreVals);
       } catch (err) {
+        console.log(err);
         setErrors(err);
       }
     },
     enableReinitialize: true,
   });
+  console.log(formik.errors);
+  console.log(formik.values);
 
   return (
     <FormikProvider value={formik}>
@@ -219,11 +223,12 @@ const EventForm = () => {
                     label="Event Roles"
                     fullWidth
                     error={formik.touched.roles && Boolean(formik.errors.roles)}
+                    helperText={formik.touched.roles && formik.errors.roles}
                   />
                 )}
                 isOptionEqualToValue={equal}
                 defaultValue={formik.values.roles}
-                onChange={formik.handleChange}
+                onChange={(_, value) => formik.setFieldValue('roles', value)}
               />
             </Grid>
             <Grid
