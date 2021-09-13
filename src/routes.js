@@ -12,18 +12,18 @@ import NewEvent from './pages/NewEvent';
 import Register from './pages/Register';
 import Settings from './pages/Settings';
 
-const routes = [
+const routes = (isLoggedIn, userData) => [
   {
     path: 'app',
-    element: <DashboardLayout />,
+    element: isLoggedIn ? <DashboardLayout userData={userData} /> : <Navigate to="/login" />,
     children: [
       { path: 'account', element: <Account /> },
-      { path: 'customers', element: <CustomerList /> },
+      { path: 'users', element: <CustomerList /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'events', element: <EventList /> },
       { path: 'events/:event', element: <EventView /> },
       { path: 'events/new', element: <NewEvent /> },
-      { path: 'settings', element: <Settings /> },
+      { path: 'reports', element: <Settings /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

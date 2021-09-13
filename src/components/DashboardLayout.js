@@ -43,7 +43,7 @@ const DashboardLayoutContent = styled('div')({
 
 export const DashboardContext = createContext({});
 
-const DashboardLayout = () => {
+const DashboardLayout = ({ userData }) => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
   const [events, eventsLoading] = useCollectionData(firebase.firestore().collection('events'),
     {
@@ -81,12 +81,13 @@ const DashboardLayout = () => {
       <DashboardSidebar
         onMobileClose={() => setMobileNavOpen(false)}
         openMobile={isMobileNavOpen}
+        userData={userData}
       />
       <DashboardLayoutWrapper>
         <DashboardLayoutContainer>
           <DashboardLayoutContent>
             <DashboardContext.Provider value={{
-              events, roles, eventSignups, users
+              events, roles, eventSignups, users, userData
             }}
             >
               {

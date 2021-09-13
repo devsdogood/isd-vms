@@ -1,9 +1,11 @@
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { useRoutes } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { ThemeProvider, StyledEngineProvider } from '@material-ui/core';
 import fb from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import GlobalStyles from './components/GlobalStyles';
 import theme from './theme';
 import routes from './routes';
@@ -17,13 +19,15 @@ const config = {
 export const firebase = fb.initializeApp(config);
 
 const App = () => {
-  const content = useRoutes(routes);
+  const [user, userLoading] = useAuthState(firebase.auth());
+  const [userData, userDataLoading] = useDocumentData(!userLoading ? firebase.firestore().collection('users').doc(user.uid) : null);
+  const content = useRoutes(routes(user, userData));
 
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
-        {content}
+        {!userLoading && !userDataLoading && userData && content}
       </ThemeProvider>
     </StyledEngineProvider>
   );

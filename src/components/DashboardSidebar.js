@@ -2,9 +2,7 @@ import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  Avatar,
   Box,
-  Button,
   Divider,
   Drawer,
   Hidden,
@@ -12,22 +10,13 @@ import {
   Typography
 } from '@material-ui/core';
 import {
-  AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
-  Lock as LockIcon,
+  Calendar as CalendaryIcon,
   Settings as SettingsIcon,
-  Activity as ActivityIcon,
   User as UserIcon,
-  UserPlus as UserPlusIcon,
   Users as UsersIcon
 } from 'react-feather';
 import NavItem from './NavItem';
-
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
-};
 
 const items = [
   {
@@ -36,13 +25,13 @@ const items = [
     title: 'Dashboard'
   },
   {
-    href: '/app/customers',
+    href: '/app/users',
     icon: UsersIcon,
-    title: 'Customers'
+    title: 'Users'
   },
   {
     href: '/app/events',
-    icon: ActivityIcon,
+    icon: CalendaryIcon,
     title: 'Events'
   },
   {
@@ -51,28 +40,13 @@ const items = [
     title: 'Account'
   },
   {
-    href: '/app/settings',
+    href: '/app/reports',
     icon: SettingsIcon,
-    title: 'Settings'
+    title: 'Reports'
   },
-  {
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error'
-  }
 ];
 
-const DashboardSidebar = ({ onMobileClose, openMobile }) => {
+const DashboardSidebar = ({ onMobileClose, openMobile, userData }) => {
   const location = useLocation();
 
   useEffect(() => {
@@ -96,28 +70,20 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           flexDirection: 'column',
           p: 2
         }}
+        as={RouterLink}
+        to="/app/account"
       >
-        <Avatar
-          component={RouterLink}
-          src={user.avatar}
-          sx={{
-            cursor: 'pointer',
-            width: 64,
-            height: 64
-          }}
-          to="/app/account"
-        />
         <Typography
           color="textPrimary"
           variant="h5"
         >
-          {user.name}
+          {[userData?.firstName, userData?.lastName].join(' ')}
         </Typography>
         <Typography
           color="textSecondary"
           variant="body2"
         >
-          {user.jobTitle}
+          {userData.isAdmin ? 'Admin' : 'Volunteer'}
         </Typography>
       </Box>
       <Divider />
@@ -132,44 +98,6 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
             />
           ))}
         </List>
-      </Box>
-      <Box sx={{ flexGrow: 1 }} />
-      <Box
-        sx={{
-          backgroundColor: 'background.default',
-          m: 2,
-          p: 2
-        }}
-      >
-        <Typography
-          align="center"
-          gutterBottom
-          variant="h4"
-        >
-          Need more?
-        </Typography>
-        <Typography
-          align="center"
-          variant="body2"
-        >
-          Upgrade to PRO version and access 20 more screens
-        </Typography>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            pt: 2
-          }}
-        >
-          <Button
-            color="primary"
-            component="a"
-            href="https://react-material-kit.devias.io"
-            variant="contained"
-          >
-            See PRO version
-          </Button>
-        </Box>
       </Box>
     </Box>
   );
