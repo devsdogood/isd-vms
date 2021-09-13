@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom';
 import DashboardLayout from './components/DashboardLayout';
 import MainLayout from './components/MainLayout';
 import Account from './pages/Account';
-import CustomerList from './pages/CustomerList';
+import UserList from './pages/UserList';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
@@ -18,7 +18,7 @@ const routes = (isLoggedIn, userData) => [
     element: isLoggedIn ? <DashboardLayout userData={userData} /> : <Navigate to="/login" />,
     children: [
       { path: 'account', element: <Account /> },
-      { path: 'users', element: <CustomerList /> },
+      { path: 'users', element: <UserList /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'events', element: <EventList /> },
       { path: 'events/:event', element: <EventView /> },
