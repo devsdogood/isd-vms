@@ -13,7 +13,7 @@ const EventCalendar = ({ events }) => {
   };
 
   const eventStyleGetter = (event) => {
-    const backgroundColor = events.includes(event.eventID) ? 'gray' : '#3f51b5';
+    const backgroundColor = events.includes(event.eventID) ? 'gray' : '#AC2725';
 
     const style = {
       backgroundColor,
