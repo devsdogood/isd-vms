@@ -20,14 +20,16 @@ export const firebase = fb.initializeApp(config);
 
 const App = () => {
   const [user, userLoading] = useAuthState(firebase.auth());
-  const [userData, userDataLoading] = useDocumentData(!userLoading ? firebase.firestore().collection('users').doc(user.uid) : null);
+  const [userData, userDataLoading] = useDocumentData(!userLoading && user !== null ? firebase.firestore().collection('users').doc(user.uid) : null);
   const content = useRoutes(routes(user, userData));
+  const displayContent = !userLoading && !userDataLoading && userData;
 
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
-        {!userLoading && !userDataLoading && userData && content}
+        {(displayContent || user === null)
+         && content}
       </ThemeProvider>
     </StyledEngineProvider>
   );
