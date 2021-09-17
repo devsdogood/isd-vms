@@ -11,6 +11,7 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
+import { firebase } from 'src/App';
 import FacebookIcon from '../icons/Facebook';
 import GoogleIcon from '../icons/Google';
 
@@ -34,15 +35,23 @@ const Login = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'demo@devias.io',
-              password: 'Password123'
+              email: '',
+              password: ''
             }}
             validationSchema={Yup.object().shape({
               email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
               password: Yup.string().max(255).required('Password is required')
             })}
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+            onSubmit={async (values, { setErrors }) => {
+              try {
+                await firebase.auth().signInWithEmailAndPassword(values.email, values.password);
+              } catch (err) {
+                return setErrors({
+                  email: err.message,
+                });
+              }
+
+              return navigate('/app/dashboard', { replace: true });
             }}
           >
             {({
