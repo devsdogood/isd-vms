@@ -21,7 +21,7 @@ export const firebase = fb.initializeApp(config);
 const App = () => {
   const [user, userLoading] = useAuthState(firebase.auth());
   const [userData, userDataLoading] = useDocumentData(!userLoading && user !== null ? firebase.firestore().collection('users').doc(user.uid) : null);
-  const content = useRoutes(routes(user, userData));
+  const content = useRoutes(userLoading ? [] : routes(user, userData));
   const displayContent = !userLoading && !userDataLoading && userData;
 
   return (
