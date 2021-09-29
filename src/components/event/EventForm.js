@@ -104,7 +104,6 @@ const EventForm = ({ event }) => {
     },
     enableReinitialize: true,
   });
-  console.log(formik.values);
 
   return (
     <FormikProvider value={formik}>
