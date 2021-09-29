@@ -11,7 +11,7 @@ const VolunteerRow = ({
     key={registrationID}
   >
     <TableCell>
-      {[user.firstName, user.lastName].join(' ')}
+      {[user?.firstName, user?.lastName].join(' ')}
     </TableCell>
     <TableCell>
       {role.title}
