@@ -69,6 +69,8 @@ const EventForm = ({ event }) => {
   const navigate = useNavigate();
   const dateFormat = 'yyyy-MM-DDTHH:mm';
 
+  const formatEvent = (date) => moment(date).format(dateFormat);
+
   const formik = useFormik({
     initialValues: (() => {
       const evRoles = event?.roles?.map((r) => ({
@@ -77,8 +79,8 @@ const EventForm = ({ event }) => {
       }));
       return {
         ...event,
-        start: moment(event?.start).format(dateFormat),
-        end: moment(event?.end).format(dateFormat),
+        start: formatEvent(event?.start),
+        end: formatEvent(event?.end),
         roles: evRoles,
       };
     })(),
@@ -102,6 +104,7 @@ const EventForm = ({ event }) => {
     },
     enableReinitialize: true,
   });
+  console.log(formik.values);
 
   return (
     <FormikProvider value={formik}>
@@ -180,7 +183,7 @@ const EventForm = ({ event }) => {
                   shrink: true,
                 }}
                 defaultValue={formik.values.start}
-                onChange={formik.handleChange}
+                onChange={(dateFromValue) => { formik.setFieldValue('start', formatEvent(dateFromValue.target.value)); }}
                 error={formik.touched.start && Boolean(formik.errors.start)}
                 helperText={formik.touched.start && formik.errors.start}
               />
@@ -200,7 +203,7 @@ const EventForm = ({ event }) => {
                   shrink: true,
                 }}
                 defaultValue={formik.values.end}
-                onChange={formik.handleChange}
+                onChange={(dateFromValue) => { formik.setFieldValue('end', formatEvent(dateFromValue.target.value)); }}
                 error={formik.touched.end && Boolean(formik.errors.end)}
                 helperText={formik.touched.end && formik.errors.end}
               />
