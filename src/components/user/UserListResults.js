@@ -12,6 +12,7 @@ import {
   TableRow,
   Typography
 } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import getInitials from '../../utils/getInitials';
 
 const UserListResults = ({ users, ...rest }) => {
@@ -50,6 +51,8 @@ const UserListResults = ({ users, ...rest }) => {
                   hover
                   key={user.userID}
                   selected={false}
+                  as={Link}
+                  to={`/app/users/${user.userID}`}
                 >
                   <TableCell>
                     <Box

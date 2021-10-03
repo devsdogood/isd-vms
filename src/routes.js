@@ -19,6 +19,7 @@ const routes = (isLoggedIn, userData) => [
     children: [
       { path: 'account', element: <Account /> },
       { path: 'users', element: <UserList /> },
+      { path: 'users/:user', element: <Account /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'events', element: <EventList /> },
       { path: 'events/:event', element: <EventView /> },
