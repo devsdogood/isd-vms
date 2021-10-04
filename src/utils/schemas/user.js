@@ -1,3 +1,4 @@
+import moment from 'moment';
 import * as Yup from 'yup';
 import 'yup-phone';
 import states from '../data/states';
@@ -25,7 +26,7 @@ const userSchema = Yup.object().shape({
   occupation: Yup.string().optional(),
   birthday: Yup.date().required('Birthdate is required')
     .test("Birthdate must be before today's date", (birthdate) => (
-      birthdate.valueOf() < new Date().valueOf()
+      moment(birthdate).valueOf() < new Date().valueOf()
     )),
   shirtSize: Yup.string().oneOf(Object.values(shirtSizes)).required('Shirt size is required'),
 });

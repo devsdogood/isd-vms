@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {
   Box,
   Button,
@@ -14,12 +15,29 @@ import {
 } from '@material-ui/core';
 import { FormikProvider, useFormik } from 'formik';
 import states from 'src/utils/data/states';
+import { firebase } from 'src/App';
 import userSchema, { shirtSizes } from '../../utils/schemas/user';
 
 const AccountProfileDetails = ({ user, ...props }) => {
   const formik = useFormik({
     initialValues: user,
     validationSchema: userSchema,
+    enableReinitialize: true,
+    onSubmit: async (values, { setStatus }) => {
+      const birthdate = moment(values.birthday, 'YYYY-MM-DD').toDate();
+      const doc = firebase.firestore().collection('users').doc(user.userID);
+
+      try {
+        await doc.set({
+          ...values,
+          birthday: birthdate,
+        }, { merge: true });
+      } catch (err) {
+        setStatus({
+          firebaseErr: err,
+        });
+      }
+    }
   });
 
   return (
