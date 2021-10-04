@@ -56,7 +56,8 @@
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^4.0.3",
     "uuid": "^8.3.0",
-    "yup": "^0.32.9"
+    "yup": "^0.32.9",
+    "yup-phone": "^1.2.19"
   },
   "devDependencies": {
     "eslint": "^7.32.0",

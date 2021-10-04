@@ -1,25 +1,14 @@
-import moment from 'moment';
 import {
   Avatar,
   Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
   Divider,
   Typography
 } from '@material-ui/core';
+import getInitials from '../../utils/getInitials';
 
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith',
-  timezone: 'GTM-7'
-};
-
-const AccountProfile = (props) => (
+const AccountProfile = ({ user, fullName, ...props }) => (
   <Card {...props}>
     <CardContent>
       <Box
@@ -30,43 +19,29 @@ const AccountProfile = (props) => (
         }}
       >
         <Avatar
-          src={user.avatar}
           sx={{
             height: 100,
             width: 100
           }}
-        />
+        >
+          {getInitials(fullName)}
+        </Avatar>
         <Typography
           color="textPrimary"
           gutterBottom
           variant="h3"
         >
-          {user.name}
+          {fullName}
         </Typography>
         <Typography
           color="textSecondary"
           variant="body1"
         >
-          {`${user.city} ${user.country}`}
-        </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body1"
-        >
-          {`${moment().format('hh:mm A')} ${user.timezone}`}
+          {`${user.city}, ${user.state}`}
         </Typography>
       </Box>
     </CardContent>
     <Divider />
-    <CardActions>
-      <Button
-        color="primary"
-        fullWidth
-        variant="text"
-      >
-        Upload picture
-      </Button>
-    </CardActions>
   </Card>
 );
 

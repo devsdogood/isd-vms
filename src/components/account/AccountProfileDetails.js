@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Box,
   Button,
@@ -7,40 +6,21 @@ import {
   CardHeader,
   Divider,
   Grid,
-  TextField
+  MenuItem,
+  Select,
+  TextField,
+  FormControl,
+  InputLabel,
 } from '@material-ui/core';
+import { FormikProvider, useFormik } from 'formik';
+import states from 'src/utils/data/states';
+import userSchema, { shirtSizes } from '../../utils/schemas/user';
 
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
-
-const AccountProfileDetails = (props) => {
-  const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA'
+const AccountProfileDetails = ({ user, ...props }) => {
+  const formik = useFormik({
+    initialValues: user,
+    validationSchema: userSchema,
   });
-
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
-  };
 
   return (
     <form
@@ -55,113 +35,227 @@ const AccountProfileDetails = (props) => {
         />
         <Divider />
         <CardContent>
-          <Grid
-            container
-            spacing={3}
+          <FormikProvider
+            value={formik}
           >
             <Grid
-              item
-              md={6}
-              xs={12}
+              container
+              spacing={3}
             >
-              <TextField
-                fullWidth
-                helperText="Please specify the first name"
-                label="First name"
-                name="firstName"
-                onChange={handleChange}
-                required
-                value={values.firstName}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Last name"
-                name="lastName"
-                onChange={handleChange}
-                required
-                value={values.lastName}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Email Address"
-                name="email"
-                onChange={handleChange}
-                required
-                value={values.email}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Phone Number"
-                name="phone"
-                onChange={handleChange}
-                type="number"
-                value={values.phone}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Country"
-                name="country"
-                onChange={handleChange}
-                required
-                value={values.country}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Select State"
-                name="state"
-                onChange={handleChange}
-                required
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
+              <Grid
+                item
+                md={6}
+                xs={12}
               >
-                {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
+                <TextField
+                  fullWidth
+                  name="firstName"
+                  variant="outlined"
+                  label="First Name"
+                  {...formik.getFieldProps('firstName')}
+                  error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+                  helperText={formik.touched.firstName && formik.errors.firstName}
+                />
+              </Grid>
+              <Grid
+                item
+                md={6}
+                xs={12}
+              >
+                <TextField
+                  fullWidth
+                  name="lastName"
+                  variant="outlined"
+                  label="Last Name"
+                  {...formik.getFieldProps('lastName')}
+                  error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+                  helperText={formik.touched.lastName && formik.errors.lastName}
+                />
+              </Grid>
+              <Grid
+                item
+                md={6}
+                xs={12}
+              >
+                <TextField
+                  fullWidth
+                  name="email"
+                  variant="outlined"
+                  label="Email"
+                  {...formik.getFieldProps('email')}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+                />
+              </Grid>
+              <Grid
+                item
+                md={6}
+                xs={12}
+              >
+                <TextField
+                  fullWidth
+                  name="phone"
+                  variant="outlined"
+                  label="Phone Number"
+                  {...formik.getFieldProps('phone')}
+                  error={formik.touched.phone && Boolean(formik.errors.phone)}
+                  helperText={formik.touched.phone && formik.errors.phone}
+                />
+              </Grid>
+              <Grid
+                item
+                md={6}
+                xs={12}
+              >
+                <TextField
+                  fullWidth
+                  name="address1"
+                  variant="outlined"
+                  label="Address 1"
+                  {...formik.getFieldProps('address1')}
+                  error={formik.touched.address1 && Boolean(formik.errors.address1)}
+                  helperText={formik.touched.address1 && formik.errors.address1}
+                />
+              </Grid>
+              <Grid
+                item
+                md={6}
+                xs={12}
+              >
+                <TextField
+                  fullWidth
+                  name="address2"
+                  variant="outlined"
+                  label="Address 2"
+                  {...formik.getFieldProps('address2')}
+                  error={formik.touched.address2 && Boolean(formik.errors.address2)}
+                  helperText={formik.touched.address2 && formik.errors.address2}
+                />
+              </Grid>
+              <Grid
+                item
+                md={4}
+                xs={8}
+              >
+                <TextField
+                  fullWidth
+                  name="city"
+                  variant="outlined"
+                  label="City"
+                  {...formik.getFieldProps('city')}
+                  error={formik.touched.city && Boolean(formik.errors.city)}
+                  helperText={formik.touched.city && formik.errors.city}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={4}
+              >
+                <FormControl variant="outlined" fullWidth>
+                  <InputLabel
+                    htmlFor="outlined-state-select"
+                    shrink
                   >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
+                    State
+                  </InputLabel>
+                  <Select
+                    fullWidth
+                    name="state"
+                    variant="outlined"
+                    label="State"
+                    options={Object.values(states)}
+                    {...formik.getFieldProps('state')}
+                    error={formik.touched.state && Boolean(formik.errors.state)}
+                    helperText={formik.touched.state && formik.errors.state}
+                    inputProps={{
+                      id: 'outlined-state-select',
+                    }}
+                  >
+                    {
+                      Object.values(states).map((s) => <MenuItem value={s}>{s}</MenuItem>)
+                    }
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid
+                item
+                md={4}
+                xs={12}
+              >
+                <TextField
+                  fullWidth
+                  name="zip"
+                  variant="outlined"
+                  label="ZIP Code"
+                  {...formik.getFieldProps('zip')}
+                  error={formik.touched.zip && Boolean(formik.errors.zip)}
+                  helperText={formik.touched.zip && formik.errors.zip}
+                />
+              </Grid>
+              <Grid
+                item
+                md={4}
+                xs={12}
+              >
+                <TextField
+                  fullWidth
+                  name="occupation"
+                  variant="outlined"
+                  label="Occupation"
+                  {...formik.getFieldProps('occupation')}
+                  error={formik.touched.occupation && Boolean(formik.errors.occupation)}
+                  helperText={formik.touched.occupation && formik.errors.occupation}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={6}
+              >
+                <TextField
+                  fullWidth
+                  name="birthday"
+                  variant="outlined"
+                  label="Birthday"
+                  type="date"
+                  defaultValue="2000-01-01"
+                  {...formik.getFieldProps('birthday')}
+                  error={formik.touched.birthday && Boolean(formik.errors.birthday)}
+                  helperText={formik.touched.birthday && formik.errors.birthday}
+                />
+              </Grid>
+              <Grid
+                item
+                md={2}
+                xs={6}
+              >
+                <FormControl variant="outlined" fullWidth>
+                  <InputLabel
+                    htmlFor="outlined-shirt-select"
+                    shrink
+                  >
+                    T-Shirt Size
+                  </InputLabel>
+                  <Select
+                    fullWidth
+                    name="shirtSize"
+                    variant="outlined"
+                    label="T-Shirt Size"
+                    options={Object.values(states)}
+                    {...formik.getFieldProps('shirtSize')}
+                    error={formik.touched.shirtSize && Boolean(formik.errors.shirtSize)}
+                    helperText={formik.touched.shirtSize && formik.errors.shirtSize}
+                    inputProps={{
+                      id: 'outlined-shirt-select',
+                    }}
+                  >
+                    {
+                      Object.values(shirtSizes).map((s) => <MenuItem value={s}>{s}</MenuItem>)
+                    }
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
-          </Grid>
+          </FormikProvider>
         </CardContent>
         <Divider />
         <Box
@@ -174,6 +268,7 @@ const AccountProfileDetails = (props) => {
           <Button
             color="primary"
             variant="contained"
+            onClick={formik.submitForm}
           >
             Save details
           </Button>

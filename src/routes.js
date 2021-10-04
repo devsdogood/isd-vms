@@ -3,6 +3,7 @@ import DashboardLayout from './components/DashboardLayout';
 import MainLayout from './components/MainLayout';
 import Account from './pages/Account';
 import UserList from './pages/UserList';
+import UserView from './pages/UserView';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
@@ -19,7 +20,7 @@ const routes = (isLoggedIn, userData) => [
     children: [
       { path: 'account', element: <Account /> },
       { path: 'users', element: <UserList /> },
-      { path: 'users/:user', element: <Account /> },
+      { path: 'users/:user', element: <UserView /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'events', element: <EventList /> },
       { path: 'events/:event', element: <EventView /> },
