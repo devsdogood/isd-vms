@@ -74,6 +74,11 @@ const DashboardLayout = ({ userData }) => {
       idField: 'userID',
       snapshotListenOptions: { includeMetadataChanges: true },
     });
+  const [adminUserData, adminUserDataLoading] = useCollectionData(userData.isAdmin ? firebase.firestore().collection('adminUserData') : null,
+    {
+      idField: 'userID',
+      snapshotListenOptions: { includeMetadataChanges: true },
+    });
 
   return (
     <DashboardLayoutRoot>
@@ -87,11 +92,11 @@ const DashboardLayout = ({ userData }) => {
         <DashboardLayoutContainer>
           <DashboardLayoutContent>
             <DashboardContext.Provider value={{
-              events, roles, eventSignups, users, userData
+              events, roles, eventSignups, users, userData, adminUserData
             }}
             >
               {
-                eventsLoading || rolesLoading || eventSignupsLoading || usersLoading
+                eventsLoading || rolesLoading || eventSignupsLoading || usersLoading || adminUserDataLoading
                   ? (
                     <>
                       <Skeleton />

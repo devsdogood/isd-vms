@@ -8,6 +8,7 @@ import {
 import { useNavigate, useParams } from 'react-router';
 import { useContext } from 'react';
 import { DashboardContext } from 'src/components/DashboardLayout';
+import AdminDataDetails from 'src/components/account/AdminDataDetails';
 import AccountProfile from '../components/account/AccountProfile';
 import AccountProfileDetails from '../components/account/AccountProfileDetails';
 
@@ -15,8 +16,9 @@ const UserView = () => {
   const navigator = useNavigate();
 
   const { user: userID } = useParams();
-  const { users } = useContext(DashboardContext);
+  const { userData, adminUserData, users } = useContext(DashboardContext);
   const user = users.find((u) => u.userID === userID);
+  const adminData = adminUserData.find((u) => u.userID === userID);
 
   if (!user) {
     navigator('/app/users/');
@@ -70,6 +72,17 @@ const UserView = () => {
                 }}
               />
             </Grid>
+            {userData.isAdmin && !user.isAdmin
+              && (
+              <Grid
+                item
+                xs={12}
+              >
+                <AdminDataDetails
+                  adminData={adminData}
+                />
+              </Grid>
+              )}
           </Grid>
         </Container>
       </Box>
