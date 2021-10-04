@@ -43,7 +43,6 @@ const AccountProfileDetails = ({ user, ...props }) => {
   return (
     <form
       autoComplete="off"
-      noValidate
       {...props}
     >
       <Card>
