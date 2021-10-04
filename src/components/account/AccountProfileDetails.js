@@ -1,7 +1,6 @@
 import moment from 'moment';
 import {
   Box,
-  Button,
   Card,
   CardContent,
   CardHeader,
@@ -13,6 +12,7 @@ import {
   FormControl,
   InputLabel,
 } from '@material-ui/core';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { FormikProvider, useFormik } from 'formik';
 import states from 'src/utils/data/states';
 import { firebase } from 'src/App';
@@ -282,13 +282,14 @@ const AccountProfileDetails = ({ user, ...props }) => {
             p: 2
           }}
         >
-          <Button
+          <LoadingButton
+            loading={formik.isSubmitting}
             color="primary"
             variant="contained"
             onClick={formik.submitForm}
           >
             Save details
-          </Button>
+          </LoadingButton>
         </Box>
       </Card>
     </form>
