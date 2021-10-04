@@ -39,7 +39,6 @@
     "deep-equal": "^2.0.5",
     "firebase": "^8.3.2",
     "formik": "^2.2.9",
-    "formik-material-ui": "^4.0.0-alpha.1",
     "history": "^5.0.0",
     "moment": "^2.27.0",
     "nprogress": "^0.2.0",
