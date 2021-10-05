@@ -104,7 +104,7 @@ const EventCard = ({ event, ...rest }) => {
               sx={{ pl: 1 }}
               variant="body2"
             >
-              {event.slots}
+              {event.roles.reduce((val, role) => val + role.slots, 0)}
               {' '}
               Slots
             </Typography>
