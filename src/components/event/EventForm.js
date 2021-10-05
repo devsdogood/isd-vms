@@ -77,6 +77,13 @@ const EventForm = ({ event }) => {
     formik.setFieldValue('roles', merged);
   };
 
+  const removeSlots = (role) => ({
+    ...role,
+    slots: undefined,
+  });
+
+  const customEqual = (roleA, roleB) => equal(removeSlots(roleA), removeSlots(roleB));
+
   const rolesErr = {
     error: formik.touched?.roles && Boolean(formik.errors?.roles) && typeof formik.errors?.roles === 'string',
     helperText: formik.touched?.roles && formik.errors?.roles
@@ -201,7 +208,7 @@ const EventForm = ({ event }) => {
                     helperText={rolesErr.error && rolesErr.helperText}
                   />
                 )}
-                isOptionEqualToValue={equal}
+                isOptionEqualToValue={customEqual}
                 defaultValue={formik.values.roles}
                 onChange={addSlotsToRoles}
               />
