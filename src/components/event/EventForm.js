@@ -10,7 +10,10 @@ import {
   Divider,
   Grid,
   TextField as MuiTextField,
-  Autocomplete
+  Autocomplete,
+  List,
+  ListItem,
+  ListItemText,
 } from '@material-ui/core';
 import { useNavigate } from 'react-router';
 import equal from 'deep-equal';
@@ -27,10 +30,12 @@ const EventForm = ({ event }) => {
 
   const formik = useFormik({
     initialValues: (() => {
-      const evRoles = event?.roles?.map((r) => ({
-        title: roles.find((ro) => ro.roleID === r.id).title,
-        roleID: r.id
+      const evRoles = event?.roles?.map(({ role, slots }) => ({
+        title: roles.find((ro) => ro.roleID === role.id).title,
+        roleID: role.id,
+        slots,
       }));
+
       return {
         ...event,
         start: formatEvent(event?.start),
@@ -40,7 +45,11 @@ const EventForm = ({ event }) => {
     })(),
     validationSchema: eventSchema,
     onSubmit: async (values, { setErrors }) => {
-      const firestoreRoles = values.roles.map((roleOption) => firebase.firestore().collection('roles').doc(roleOption.roleID));
+      const firestoreRoles = values.roles.map((role) => ({
+        role: firebase.firestore().collection('roles').doc(role.roleID),
+        slots: role.slots
+      }));
+
       const firestoreVals = {
         ...values,
         roles: firestoreRoles,
@@ -58,6 +67,11 @@ const EventForm = ({ event }) => {
     },
     enableReinitialize: true,
   });
+
+  const rolesErr = {
+    error: formik.touched?.roles && Boolean(formik.errors?.roles) && typeof formik.errors?.roles === 'string',
+    helperText: formik.touched?.roles && formik.errors?.roles
+  };
 
   return (
     <FormikProvider value={formik}>
@@ -163,7 +177,6 @@ const EventForm = ({ event }) => {
             </Grid>
             <Grid
               item
-              sm={6}
               xs={12}
             >
               <Autocomplete
@@ -175,8 +188,8 @@ const EventForm = ({ event }) => {
                     {...params}
                     label="Event Roles"
                     fullWidth
-                    error={formik.touched.roles && Boolean(formik.errors.roles)}
-                    helperText={formik.touched.roles && formik.errors.roles}
+                    error={rolesErr.error}
+                    helperText={rolesErr.error && rolesErr.helperText}
                   />
                 )}
                 isOptionEqualToValue={equal}
@@ -186,20 +199,42 @@ const EventForm = ({ event }) => {
             </Grid>
             <Grid
               item
-              sm={6}
               xs={12}
             >
-              <MuiTextField
-                label="Volunteer Slots"
-                fullWidth
-                name="slots"
-                variant="outlined"
-                type="number"
-                defaultValue={formik.values.slots}
-                onChange={formik.handleChange}
-                error={formik.touched.slots && Boolean(formik.errors.slots)}
-                helperText={formik.touched.slots && formik.errors.slots}
-              />
+              <List style={{ padding: 0 }}>
+                {formik.values.roles.map(({ title, slots }, i) => (
+                  <Grid>
+                    <ListItem>
+                      <Grid
+                        item
+                        lg={1}
+                        md={2}
+                        xs={4}
+                      >
+                        <MuiTextField
+                          size="small"
+                          name={`roles[${i}].slots`}
+                          variant="outlined"
+                          label="Slots"
+                          value={slots}
+                          type="number"
+                          onChange={formik.handleChange}
+                          error={formik.touched?.roles?.at(i) && Boolean(formik.errors?.roles?.at(i)?.slots)}
+                          helperText={formik.touched?.roles?.at(i) && formik.errors?.roles?.at(i)?.slots}
+                        />
+                      </Grid>
+                      <Grid
+                        item
+                        lg={11}
+                        md={10}
+                        xs={8}
+                      >
+                        <ListItemText style={{ marginLeft: '1em' }} id={title} primary={`for ${title}`} />
+                      </Grid>
+                    </ListItem>
+                  </Grid>
+                ))}
+              </List>
             </Grid>
             <Grid
               item

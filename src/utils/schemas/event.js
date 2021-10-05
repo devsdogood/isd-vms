@@ -34,6 +34,7 @@ const eventSchema = Yup.object({
       Yup.object().shape({
         title: Yup.string().required(),
         roleID: Yup.string().required(),
+        slots: Yup.number('Must be a number').integer('Must be an integer').positive('Must be positive').required('Required'),
       })
     )
     .min(1, 'Events must have at least one role'),
