@@ -20,6 +20,7 @@ import { FormikProvider, useFormik } from 'formik';
 import { useContext } from 'react';
 import adminDataSchema, { trainings } from 'src/utils/schemas/adminData';
 import equal from 'deep-equal';
+import { firebase } from 'src/App';
 import { DashboardContext } from '../DashboardLayout';
 
 const AdminDataDetails = ({ adminData, ...props }) => {
@@ -36,6 +37,21 @@ const AdminDataDetails = ({ adminData, ...props }) => {
     },
     validationSchema: adminDataSchema,
     enableReinitialize: true,
+    onSubmit: async (values, { setStatus }) => {
+      const firestoreRoles = values.roles.map((roleOption) => firebase.firestore().collection('roles').doc(roleOption.roleID));
+      const doc = firebase.firestore().collection('adminUserData').doc(adminData.userID);
+
+      try {
+        await doc.set({
+          ...values,
+          roles: firestoreRoles,
+        }, { merge: true });
+      } catch (err) {
+        setStatus({
+          firebaseErr: err,
+        });
+      }
+    },
   });
 
   return (
