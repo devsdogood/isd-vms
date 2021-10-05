@@ -68,6 +68,15 @@ const EventForm = ({ event }) => {
     enableReinitialize: true,
   });
 
+  const addSlotsToRoles = (_, newRoles) => {
+    const merged = newRoles.map((role) => ({
+      ...role,
+      slots: formik.values.roles?.find((r) => r.roleID === role.roleID)?.slots
+    }));
+
+    formik.setFieldValue('roles', merged);
+  };
+
   const rolesErr = {
     error: formik.touched?.roles && Boolean(formik.errors?.roles) && typeof formik.errors?.roles === 'string',
     helperText: formik.touched?.roles && formik.errors?.roles
@@ -194,7 +203,7 @@ const EventForm = ({ event }) => {
                 )}
                 isOptionEqualToValue={equal}
                 defaultValue={formik.values.roles}
-                onChange={(_, value) => formik.setFieldValue('roles', value)}
+                onChange={addSlotsToRoles}
               />
             </Grid>
             <Grid
@@ -202,7 +211,7 @@ const EventForm = ({ event }) => {
               xs={12}
             >
               <List style={{ padding: 0 }}>
-                {formik.values.roles.map(({ title, slots }, i) => (
+                {formik.values.roles && formik.values.roles.map(({ title, slots }, i) => (
                   <Grid>
                     <ListItem>
                       <Grid
