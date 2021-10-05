@@ -23,6 +23,11 @@ import equal from 'deep-equal';
 import { firebase } from 'src/App';
 import { DashboardContext } from '../DashboardLayout';
 
+const ViewDocument = ({ url }) => (
+  url
+    && <a href={url} target="_blank" rel="noreferrer">View document</a>
+);
+
 const AdminDataDetails = ({ adminData, ...props }) => {
   const { roles } = useContext(DashboardContext);
   const userRoles = adminData?.roles?.map((r) => ({
@@ -87,6 +92,7 @@ const AdminDataDetails = ({ adminData, ...props }) => {
                   error={formik.touched.liabilityWaiver && Boolean(formik.errors.liabilityWaiver)}
                   helperText={formik.touched.liabilityWaiver && formik.errors.liabilityWaiver}
                 />
+                <ViewDocument url={adminData.liabilityWaiver} />
               </Grid>
               <Grid
                 item
@@ -102,6 +108,7 @@ const AdminDataDetails = ({ adminData, ...props }) => {
                   error={formik.touched.volunteerApplication && Boolean(formik.errors.volunteerApplication)}
                   helperText={formik.touched.volunteerApplication && formik.errors.volunteerApplication}
                 />
+                <ViewDocument url={adminData.volunteerApplication} />
               </Grid>
               <Grid
                 item
