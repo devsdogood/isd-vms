@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import * as yup from 'yup';
 import moment from 'moment';
 import { useFormik, FormikProvider } from 'formik';
 import {
@@ -16,53 +15,8 @@ import {
 import { useNavigate } from 'react-router';
 import equal from 'deep-equal';
 import { DashboardContext } from 'src/components/DashboardLayout';
+import eventSchema from 'src/utils/schemas/event';
 import { firebase } from '../../App';
-
-const validationSchema = yup.object({
-  contact: yup
-    .string('Contact for event')
-    .required('Contact is required'),
-  deleted: yup
-    .boolean('Hide event'),
-  description: yup
-    .string('Description of event')
-    .required('Description is required'),
-  start: yup
-    .date()
-    .min(
-      new Date(),
-      'Start date can\'t be before current date'
-    )
-    .required('Start date is required'),
-  end: yup
-    .date()
-    .min(
-      yup.ref('start'),
-      'End date can\'t be before start date'
-    )
-    .required('End date is required'),
-  locationAddress: yup
-    .string('Address for event location')
-    .required('Address is required'),
-  locationName: yup
-    .string('Name for the event\'s location')
-    .required('Location name is required'),
-  roles: yup
-    .array().of(
-      yup.object().shape({
-        title: yup.string().required(),
-        roleID: yup.string().required(),
-      })
-    )
-    .min(1, 'Events must have at least one role'),
-  slots: yup
-    .number('Number of slots available for the event')
-    .integer()
-    .required('Slots is required'),
-  title: yup
-    .string('Event title')
-    .required('Title is required')
-});
 
 const EventForm = ({ event }) => {
   const { roles } = useContext(DashboardContext);
@@ -84,7 +38,7 @@ const EventForm = ({ event }) => {
         roles: evRoles,
       };
     })(),
-    validationSchema,
+    validationSchema: eventSchema,
     onSubmit: async (values, { setErrors }) => {
       const firestoreRoles = values.roles.map((roleOption) => firebase.firestore().collection('roles').doc(roleOption.roleID));
       const firestoreVals = {
