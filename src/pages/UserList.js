@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet';
 import { Box, Container } from '@material-ui/core';
 import { DashboardContext } from 'src/components/DashboardLayout';
 import UserListResults from '../components/user/UserListResults';
-import UserListToolbar from '../components/user/UserListToolbar';
 
 const UserList = () => {
   const { users } = useContext(DashboardContext);
@@ -21,7 +20,7 @@ const UserList = () => {
         }}
       >
         <Container maxWidth={false}>
-          <UserListToolbar />
+          {/* <UserListToolbar /> */}
           <Box sx={{ pt: 3 }}>
             <UserListResults users={users} />
           </Box>
