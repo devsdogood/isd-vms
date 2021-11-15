@@ -17,7 +17,7 @@ const Account = () => {
   return (
     <>
       <Helmet>
-        <title>Account | Material Kit</title>
+        <title>Account | Iowa Service Dogs VMS</title>
       </Helmet>
       <Box
         sx={{

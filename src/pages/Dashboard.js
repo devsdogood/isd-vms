@@ -13,7 +13,7 @@ const Dashboard = () => {
   return (
     <>
       <Helmet>
-        <title>Dashboard | Material Kit</title>
+        <title>Dashboard | Iowa Service Dogs VMS</title>
       </Helmet>
       <Box
         sx={{

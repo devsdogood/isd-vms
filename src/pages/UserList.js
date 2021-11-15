@@ -11,7 +11,7 @@ const UserList = () => {
   return (
     <>
       <Helmet>
-        <title>Users | Material Kit</title>
+        <title>Users | Iowa Service Dogs VMS</title>
       </Helmet>
       <Box
         sx={{

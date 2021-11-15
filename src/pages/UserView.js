@@ -33,7 +33,7 @@ const UserView = () => {
         <title>
           {fullName}
           {' '}
-          | Material Kit
+          | Iowa Service Dogs VMS
         </title>
       </Helmet>
       <Box

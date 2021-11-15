@@ -16,7 +16,7 @@ const EventList = () => {
   return (
     <>
       <Helmet>
-        <title>Events | Material Kit</title>
+        <title>Events | Iowa Service Dogs VMS</title>
       </Helmet>
       <Box
         sx={{
