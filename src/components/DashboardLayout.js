@@ -60,7 +60,8 @@ const DashboardLayout = ({ userData }) => {
       idField: 'roleID',
       snapshotListenOptions: { includeMetadataChanges: true },
     });
-  const [eventSignups, eventSignupsLoading] = useCollectionData(firebase.firestore().collection('eventSignups'),
+  const [eventSignups, eventSignupsLoading] = useCollectionData(
+    firebase.firestore().collection('eventSignups').where('deleted', '==', false),
     {
       idField: 'signupID',
       transform: (data) => ({
@@ -68,7 +69,19 @@ const DashboardLayout = ({ userData }) => {
         registered: data.registered.toDate(),
       }),
       snapshotListenOptions: { includeMetadataChanges: true },
-    });
+    }
+  );
+  const [usersEventSignups, usersEventSignupsLoading] = useCollectionData(
+    firebase.firestore().collection('eventSignups').where('volunteer', '==', userData.userID).where('deleted', '==', false),
+    {
+      idField: 'signupID',
+      transform: (data) => ({
+        ...data,
+        registered: data.registered.toDate(),
+      }),
+      snapshotListenOptions: { includeMetadataChanges: true },
+    }
+  );
   const [users, usersLoading] = useCollectionData(firebase.firestore().collection('users'),
     {
       idField: 'userID',
@@ -92,11 +105,11 @@ const DashboardLayout = ({ userData }) => {
         <DashboardLayoutContainer>
           <DashboardLayoutContent>
             <DashboardContext.Provider value={{
-              events, roles, eventSignups, users, userData, adminUserData
+              events, roles, eventSignups, users, userData, adminUserData, usersEventSignups
             }}
             >
               {
-                eventsLoading || rolesLoading || eventSignupsLoading || usersLoading || adminUserDataLoading
+                eventsLoading || rolesLoading || eventSignupsLoading || usersLoading || adminUserDataLoading || usersEventSignupsLoading
                   ? (
                     <>
                       <Skeleton />

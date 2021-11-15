@@ -9,7 +9,7 @@ import EventForm from 'src/components/event/EventForm';
 import VolunteerList from 'src/components/event/VolunteerList';
 import { DashboardContext } from 'src/components/DashboardLayout';
 
-const EventView = () => {
+const AdminEventView = () => {
   const { event: eventParam } = useParams();
   const { events, eventSignups } = useContext(DashboardContext);
   const event = events.find((e) => e.eventID === eventParam);
@@ -71,4 +71,4 @@ const EventView = () => {
   );
 };
 
-export default EventView;
+export default AdminEventView;

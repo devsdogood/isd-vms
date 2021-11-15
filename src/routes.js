@@ -8,10 +8,11 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import EventList from './pages/EventList';
-import EventView from './pages/EventView';
+import AdminEventView from './pages/AdminEventView';
 import NewEvent from './pages/NewEvent';
 import Register from './pages/Register';
 import Settings from './pages/Settings';
+import VolunteerEventView from './pages/VolunteerEventView';
 
 const routes = (isLoggedIn, userData) => [
   {
@@ -23,7 +24,7 @@ const routes = (isLoggedIn, userData) => [
       { path: 'users/:user', element: <UserView /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'events', element: <EventList /> },
-      { path: 'events/:event', element: <EventView /> },
+      { path: 'events/:event', element: userData?.isAdmin ? <AdminEventView /> : <VolunteerEventView /> },
       { path: 'events/new', element: <NewEvent /> },
       { path: 'reports', element: <Settings /> },
       { path: '*', element: <Navigate to="/404" /> }
