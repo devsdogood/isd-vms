@@ -8,7 +8,7 @@ import { DashboardContext } from 'src/components/DashboardLayout';
 import RecentRegistrations from '../components/dashboard/RecentRegistrations';
 
 const Dashboard = () => {
-  const { events } = useContext(DashboardContext);
+  const { userData, events } = useContext(DashboardContext);
 
   return (
     <>
@@ -40,7 +40,7 @@ const Dashboard = () => {
               item
               xs={12}
             >
-              <RecentRegistrations />
+              {userData.isAdmin && <RecentRegistrations />}
             </Grid>
           </Grid>
         </Container>
