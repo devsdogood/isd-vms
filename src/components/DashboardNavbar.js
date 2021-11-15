@@ -1,21 +1,22 @@
-import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   AppBar,
-  Badge,
   Box,
   Hidden,
   IconButton,
   Toolbar
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
+import { firebase } from 'src/App';
 import Logo from './Logo';
 
 const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
-  const [notifications] = useState([]);
+  // const [notifications] = useState([]);
+  const signOut = () => {
+    firebase.auth().signOut();
+  };
 
   return (
     <AppBar
@@ -28,7 +29,7 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
         </RouterLink>
         <Box sx={{ flexGrow: 1 }} />
         <Hidden xlDown>
-          <IconButton color="inherit" size="large">
+          {/* <IconButton color="inherit" size="large">
             <Badge
               badgeContent={notifications.length}
               color="primary"
@@ -36,8 +37,8 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
             >
               <NotificationsIcon />
             </Badge>
-          </IconButton>
-          <IconButton color="inherit" size="large">
+          </IconButton> */}
+          <IconButton color="inherit" size="large" onClick={signOut}>
             <InputIcon />
           </IconButton>
         </Hidden>
