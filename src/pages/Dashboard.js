@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core';
 import EventCalendar from 'src/components/dashboard/Calendar';
 import { DashboardContext } from 'src/components/DashboardLayout';
-import LatestOrders from '../components/dashboard/LatestOrders';
+import RecentRegistrations from '../components/dashboard/RecentRegistrations';
 
 const Dashboard = () => {
   const { events } = useContext(DashboardContext);
@@ -38,12 +38,9 @@ const Dashboard = () => {
             </Grid>
             <Grid
               item
-              lg={8}
-              md={12}
-              xl={9}
               xs={12}
             >
-              <LatestOrders />
+              <RecentRegistrations />
             </Grid>
           </Grid>
         </Container>
