@@ -27,7 +27,7 @@ const VolunteerList = ({ isRegistered, eventID }) => {
 
   // Filter eventSignups for this event
   const signups = eventSignups.filter((s) => s.deleted !== isRegistered
-    && s.event.id === eventID);
+    && s.event === eventID);
 
   const updateSignup = (signupID) => {
     firebase.firestore().collection('eventSignups').doc(signupID).set({
@@ -76,8 +76,8 @@ const VolunteerList = ({ isRegistered, eventID }) => {
               {signups.map((signup) => (
                 <VolunteerRow
                   key={signup.signupID}
-                  user={users.find((v) => v.userID === signup.volunteer.id)}
-                  role={roles.find((r) => r.roleID === signup.role.id)}
+                  user={users.find((v) => v.userID === signup.volunteer)}
+                  role={roles.find((r) => r.roleID === signup.role)}
                   registered={moment(signup.registered).format('MM/DD/YY')}
                   actionButton={isRegistered
                     ? <RemoveButton signupID={signup.signupID} />
