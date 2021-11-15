@@ -25,11 +25,6 @@ const items = [
     title: 'Dashboard'
   },
   {
-    href: '/app/users',
-    icon: UsersIcon,
-    title: 'Users'
-  },
-  {
     href: '/app/events',
     icon: CalendaryIcon,
     title: 'Events'
@@ -38,6 +33,15 @@ const items = [
     href: '/app/account',
     icon: UserIcon,
     title: 'Account'
+  },
+];
+
+const adminItems = [
+  ...items,
+  {
+    href: '/app/users',
+    icon: UsersIcon,
+    title: 'Users'
   },
   {
     href: '/app/reports',
@@ -48,6 +52,7 @@ const items = [
 
 const DashboardSidebar = ({ onMobileClose, openMobile, userData }) => {
   const location = useLocation();
+  const navItems = userData.isAdmin ? adminItems : items;
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -89,7 +94,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, userData }) => {
       <Divider />
       <Box sx={{ p: 2 }}>
         <List>
-          {items.map((item) => (
+          {navItems.map((item) => (
             <NavItem
               href={item.href}
               key={item.title}
