@@ -16,9 +16,9 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import { useNavigate } from 'react-router';
-import equal from 'deep-equal';
 import { DashboardContext } from 'src/components/DashboardLayout';
 import eventSchema from 'src/utils/schemas/event';
+import _ from 'lodash';
 import { firebase } from '../../App';
 
 const EventForm = ({ event }) => {
@@ -30,10 +30,12 @@ const EventForm = ({ event }) => {
 
   const formik = useFormik({
     initialValues: (() => {
-      const evRoles = event?.roles?.map(({ role, slots }) => ({
-        title: roles.find((ro) => ro.roleID === role.id).title,
-        roleID: role.id,
-        slots,
+      const evRoles = event?.roles?.map(({ role: roleDoc, ...role }) => ({
+        title: roles.find((ro) => ro.roleID === roleDoc.id).title,
+        roleID: roleDoc.id,
+        shiftStart: formatEvent(role.shiftStart || event?.start),
+        shiftEnd: formatEvent(role.shiftEnd || event?.end),
+        slots: role.slots,
       }));
 
       return {
@@ -45,9 +47,9 @@ const EventForm = ({ event }) => {
     })(),
     validationSchema: eventSchema,
     onSubmit: async (values, { setErrors }) => {
-      const firestoreRoles = values.roles.map((role) => ({
+      const firestoreRoles = values.roles?.map((role) => ({
         role: firebase.firestore().collection('roles').doc(role.roleID),
-        slots: role.slots
+        ..._.pick(role, ['slots', 'shiftStart', 'shiftEnd'])
       }));
 
       const firestoreVals = {
@@ -68,21 +70,16 @@ const EventForm = ({ event }) => {
     enableReinitialize: true,
   });
 
-  const addSlotsToRoles = (_, newRoles) => {
+  const addSlotsToRoles = (__, newRoles) => {
     const merged = newRoles.map((role) => ({
       ...role,
-      slots: formik.values.roles?.find((r) => r.roleID === role.roleID)?.slots
+      slots: formik.values.roles?.find((r) => r.roleID === role.roleID)?.slots,
+      shiftStart: formatEvent(formik.values.start),
+      shiftEnd: formatEvent(formik.values.end),
     }));
 
     formik.setFieldValue('roles', merged);
   };
-
-  const removeSlots = (role) => ({
-    ...role,
-    slots: undefined,
-  });
-
-  const customEqual = (roleA, roleB) => equal(removeSlots(roleA), removeSlots(roleB));
 
   const rolesErr = {
     error: formik.touched?.roles && Boolean(formik.errors?.roles) && typeof formik.errors?.roles === 'string',
@@ -114,8 +111,8 @@ const EventForm = ({ event }) => {
                 label="Title"
                 value={formik.values.title}
                 onChange={formik.handleChange}
-                error={formik.touched.title && Boolean(formik.errors.title)}
-                helperText={formik.touched.title && formik.errors.title}
+                error={formik.touched?.title && Boolean(formik.errors.title)}
+                helperText={formik.touched?.title && formik.errors.title}
               />
             </Grid>
             <Grid
@@ -130,8 +127,8 @@ const EventForm = ({ event }) => {
                 label="Contact Name"
                 value={formik.values.contact}
                 onChange={formik.handleChange}
-                error={formik.touched.contact && Boolean(formik.errors.contact)}
-                helperText={formik.touched.contact && formik.errors.contact}
+                error={formik.touched?.contact && Boolean(formik.errors.contact)}
+                helperText={formik.touched?.contact && formik.errors.contact}
               />
             </Grid>
             <Grid
@@ -147,8 +144,8 @@ const EventForm = ({ event }) => {
                 label="Event Description"
                 value={formik.values.description}
                 onChange={formik.handleChange}
-                error={formik.touched.description && Boolean(formik.errors.description)}
-                helperText={formik.touched.description && formik.errors.description}
+                error={formik.touched?.description && Boolean(formik.errors.description)}
+                helperText={formik.touched?.description && formik.errors.description}
               />
             </Grid>
             <Grid
@@ -167,8 +164,8 @@ const EventForm = ({ event }) => {
                 }}
                 defaultValue={formik.values.start}
                 onChange={(dateFromValue) => { formik.setFieldValue('start', formatEvent(dateFromValue.target.value)); }}
-                error={formik.touched.start && Boolean(formik.errors.start)}
-                helperText={formik.touched.start && formik.errors.start}
+                error={formik.touched?.start && Boolean(formik.errors.start)}
+                helperText={formik.touched?.start && formik.errors.start}
               />
             </Grid>
             <Grid
@@ -187,8 +184,8 @@ const EventForm = ({ event }) => {
                 }}
                 defaultValue={formik.values.end}
                 onChange={(dateFromValue) => { formik.setFieldValue('end', formatEvent(dateFromValue.target.value)); }}
-                error={formik.touched.end && Boolean(formik.errors.end)}
-                helperText={formik.touched.end && formik.errors.end}
+                error={formik.touched?.end && Boolean(formik.errors.end)}
+                helperText={formik.touched?.end && formik.errors.end}
               />
             </Grid>
             <Grid
@@ -208,7 +205,7 @@ const EventForm = ({ event }) => {
                     helperText={rolesErr.error && rolesErr.helperText}
                   />
                 )}
-                isOptionEqualToValue={customEqual}
+                isOptionEqualToValue={() => false}
                 defaultValue={formik.values.roles}
                 onChange={addSlotsToRoles}
               />
@@ -218,7 +215,7 @@ const EventForm = ({ event }) => {
               xs={12}
             >
               <List style={{ padding: 0 }}>
-                {formik.values.roles && formik.values.roles.map(({ title, slots }, i) => (
+                {formik.values.roles && formik.values.roles?.map(({ title, slots, ...role }, i) => (
                   <Grid>
                     <ListItem>
                       <Grid
@@ -241,11 +238,54 @@ const EventForm = ({ event }) => {
                       </Grid>
                       <Grid
                         item
-                        lg={11}
-                        md={10}
+                        lg={3}
+                        md={4}
                         xs={8}
                       >
                         <ListItemText style={{ marginLeft: '1em' }} id={title} primary={`for ${title}`} />
+                      </Grid>
+                      <Grid
+                        item
+                        lg={3}
+                        md={4}
+                        xs={8}
+                      >
+                        <MuiTextField
+                          label="Shift Start"
+                          type="datetime-local"
+                          fullWidth
+                          name={`roles[${i}].shiftStart`}
+                          variant="outlined"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          defaultValue={role.shiftStart || formik.values.start}
+                          onChange={(dateFromValue) => { formik.setFieldValue(`roles[${i}].shiftStart`, formatEvent(dateFromValue.target.value)); }}
+                          error={formik.touched?.roles?.at(i)?.shiftStart && Boolean(formik.errors.roles?.at(i)?.shiftStart)}
+                          helperText={formik.touched?.roles?.at(i)?.shiftStart && formik.errors.roles?.at(i)?.shiftStart}
+                        />
+                      </Grid>
+                      <Grid
+                        item
+                        lg={3}
+                        md={4}
+                        xs={8}
+                        style={{ marginLeft: '1em' }}
+                      >
+                        <MuiTextField
+                          label="Shift End"
+                          type="datetime-local"
+                          fullWidth
+                          name={`roles[${i}].shiftEnd`}
+                          variant="outlined"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          defaultValue={role.shiftEnd || formik.values.end}
+                          onChange={(dateFromValue) => { formik.setFieldValue(`roles[${i}].shiftEnd`, formatEvent(dateFromValue.target.value)); }}
+                          error={formik.touched?.roles?.at(i)?.shiftEnd && Boolean(formik.errors.roles?.at(i)?.shiftEnd)}
+                          helperText={formik.touched?.roles?.at(i)?.shiftEnd && formik.errors.roles?.at(i)?.shiftEnd}
+                        />
                       </Grid>
                     </ListItem>
                   </Grid>
@@ -264,8 +304,8 @@ const EventForm = ({ event }) => {
                 variant="outlined"
                 defaultValue={formik.values.locationName}
                 onChange={formik.handleChange}
-                error={formik.touched.locationName && Boolean(formik.errors.locationName)}
-                helperText={formik.touched.locationName && formik.errors.locationName}
+                error={formik.touched?.locationName && Boolean(formik.errors.locationName)}
+                helperText={formik.touched?.locationName && formik.errors.locationName}
               />
             </Grid>
             <Grid
@@ -280,8 +320,8 @@ const EventForm = ({ event }) => {
                 variant="outlined"
                 defaultValue={formik.values.locationAddress}
                 onChange={formik.handleChange}
-                error={formik.touched.locationAddress && Boolean(formik.errors.locationAddress)}
-                helperText={formik.touched.locationAddress && formik.errors.locationAddress}
+                error={formik.touched?.locationAddress && Boolean(formik.errors.locationAddress)}
+                helperText={formik.touched?.locationAddress && formik.errors.locationAddress}
               />
             </Grid>
           </Grid>
