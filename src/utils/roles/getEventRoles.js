@@ -4,9 +4,10 @@ const isNotDeleted = (role) => !role.deleted;
 
 export const isGlobalRole = (role) => [null, '', undefined].includes(role.event);
 
+const isEventOrGlobal = (role, event) => isEventRole(role, event) || isGlobalRole(role);
+
 const getEventRoles = (roles, event) => roles
     .filter(isNotDeleted)
-    .filter((role) => isEventRole(role, event))
-    .filter(isGlobalRole);
+    .filter((role) => isEventOrGlobal(role, event));
 
 export default getEventRoles;
