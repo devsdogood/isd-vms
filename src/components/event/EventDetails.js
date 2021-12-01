@@ -36,10 +36,10 @@ const EventDetails = ({ event }) => {
   ];
 
   const { usersEventSignups, roles, userData } = useContext(DashboardContext);
-  const eventRoles = event?.roles?.map(({ role, slots }) => ({
+  const eventRoles = event?.roles?.map(({ role, ...rest }) => ({
     title: roles.find((ro) => ro.roleID === role.id).title,
     roleID: role.id,
-    slots,
+    ...rest,
   }));
 
   const usersSignup = usersEventSignups.find((signup) => signup.event === event.eventID);
@@ -65,7 +65,7 @@ const EventDetails = ({ event }) => {
       return setEventErr('Already signed up for this event');
     }
 
-    if (eventRoles.map((r) => r.roleID).indexOf(currentRole) === -1) {
+    if (eventRoles.map((r) => r.roleID).indexOf(currentRole.roleID) === -1) {
       return setEventErr('Must select a valid event');
     }
 
@@ -74,7 +74,9 @@ const EventDetails = ({ event }) => {
       deleted: false,
       event: event.eventID,
       registered: new Date(),
-      role: currentRole,
+      role: currentRole.roleID,
+      shiftStart: currentRole.shiftStart,
+      shiftEnd: currentRole.shiftEnd,
       volunteer: userData.userID,
       status: 0,
     });
@@ -98,6 +100,12 @@ const EventDetails = ({ event }) => {
         for this event
       </Typography>
     </Grid>
+  );
+
+  const roleToString = (role) => `${role.title} (${moment(role.shiftStart).format('hh:mm A')} - ${moment(role.shiftEnd).format('hh:mm A')})`;
+
+  const handleAddRole = (e) => setCurrentRole(
+    eventRoles.find((ev) => roleToString(ev) === e.target.value)
   );
 
   return (
@@ -150,11 +158,11 @@ const EventDetails = ({ event }) => {
                   labelId="event-roles-dropdown-select-label"
                   id="event-roles-dropdown-select"
                   label="Role"
-                  value={currentRole || ''}
+                  value={roleToString(currentRole) || ''}
                   size="small"
-                  onChange={(e) => setCurrentRole(e.target.value)}
+                  onChange={handleAddRole}
                 >
-                  {eventRoles.map((role) => <MenuItem value={role.roleID}>{role.title}</MenuItem>)}
+                  {eventRoles.map((role) => <MenuItem value={roleToString(role)}>{roleToString(role)}</MenuItem>)}
                 </Select>
                 <FormHelperText>{eventErr}</FormHelperText>
               </FormControl>
