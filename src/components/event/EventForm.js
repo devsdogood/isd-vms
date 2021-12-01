@@ -24,7 +24,7 @@ import { firebase } from '../../App';
 
 const EventForm = ({ event }) => {
   const { roles: contextRoles } = useContext(DashboardContext);
-  const roles = getEventRoles(contextRoles, event);
+  const roles = getEventRoles(contextRoles, event.eventID);
 
   const navigate = useNavigate();
   const dateFormat = 'yyyy-MM-DDTHH:mm';
