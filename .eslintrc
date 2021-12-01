@@ -26,6 +26,10 @@
     "ecmaVersion": 2020
   },
   "rules": {
+    // TODO: Remove when is https://github.com/babel/babel-eslint/issues/530 fixed
+    "template-curly-spacing" : "off",
+    "indent" : "off",
+
     "comma-dangle": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "max-len": "off",

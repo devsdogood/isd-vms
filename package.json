@@ -34,8 +34,8 @@
     "@emotion/styled": "^11.3.0",
     "@material-ui/core": "^5.0.0-beta.5",
     "@material-ui/icons": "^5.0.0-beta.5",
+    "@material-ui/lab": "^5.0.0-alpha.44",
     "@material-ui/styles": "^5.0.0-beta.5",
-    "@mui/lab": "^5.0.0-alpha.49",
     "chart.js": "^3.5.1",
     "deep-equal": "^2.0.5",
     "firebase": "^8.3.2",
@@ -60,7 +60,6 @@
     "yup-phone": "^1.2.19"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1"
   }
 }
