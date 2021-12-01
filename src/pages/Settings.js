@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet';
 import { Box, Container } from '@material-ui/core';
+import RolesSettings from 'src/components/settings/RolesSettings';
 import SettingsNotifications from '../components/settings/SettingsNotifications';
 import SettingsPassword from '../components/settings/SettingsPassword';
 
@@ -16,9 +17,8 @@ const SettingsView = () => (
       }}
     >
       <Container maxWidth="lg">
-        <SettingsNotifications />
         <Box sx={{ pt: 3 }}>
-          <SettingsPassword />
+          <RolesSettings />
         </Box>
       </Container>
     </Box>

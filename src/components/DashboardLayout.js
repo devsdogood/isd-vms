@@ -55,7 +55,7 @@ const DashboardLayout = ({ userData }) => {
       }),
       snapshotListenOptions: { includeMetadataChanges: true },
     });
-  const [roles, rolesLoading] = useCollectionData(firebase.firestore().collection('roles'),
+  const [roles, rolesLoading] = useCollectionData(firebase.firestore().collection('roles').where('deleted', '!=', true),
     {
       idField: 'roleID',
       snapshotListenOptions: { includeMetadataChanges: true },

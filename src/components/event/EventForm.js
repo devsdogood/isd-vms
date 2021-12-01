@@ -19,10 +19,13 @@ import { useNavigate } from 'react-router';
 import { DashboardContext } from 'src/components/DashboardLayout';
 import eventSchema from 'src/utils/schemas/event';
 import _ from 'lodash';
+import getEventRoles from 'src/utils/roles/getEventRoles';
 import { firebase } from '../../App';
 
 const EventForm = ({ event }) => {
-  const { roles } = useContext(DashboardContext);
+  const { roles: contextRoles } = useContext(DashboardContext);
+  const roles = getEventRoles(contextRoles, event);
+
   const navigate = useNavigate();
   const dateFormat = 'yyyy-MM-DDTHH:mm';
 
