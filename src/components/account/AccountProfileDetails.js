@@ -12,7 +12,7 @@ import {
   FormControl,
   InputLabel,
 } from '@material-ui/core';
-import LoadingButton from '@mui/lab/LoadingButton';
+import { LoadingButton } from '@material-ui/lab';
 import { FormikProvider, useFormik } from 'formik';
 import states from 'src/utils/data/states';
 import { firebase } from 'src/App';

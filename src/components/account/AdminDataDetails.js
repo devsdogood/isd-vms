@@ -15,7 +15,7 @@ import {
   Autocomplete,
   Typography
 } from '@material-ui/core';
-import LoadingButton from '@mui/lab/LoadingButton';
+import { LoadingButton } from '@material-ui/lab';
 import { FormikProvider, useFormik } from 'formik';
 import { useContext } from 'react';
 import adminDataSchema, { trainings } from 'src/utils/schemas/adminData';
