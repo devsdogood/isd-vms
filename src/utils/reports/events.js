@@ -1,5 +1,11 @@
 import moment from 'moment';
 
+const getSignupsForEvent = (event, signups) => signups.filter(
+    (signup) => signup.event === event.eventID
+);
+
+const getSlotsForEvent = (event) => event.roles.reduce((acc, role) => acc + role.slots, 0);
+
 const getShiftDuration = (start, end) => moment.duration(moment(end).diff(moment(start))).asMinutes();
 
 const getMinutesOverTime = (start, end, user, signups, events) => {
@@ -14,7 +20,29 @@ const getMinutesOverTime = (start, end, user, signups, events) => {
     return filteredSignups.reduce((acc, { shiftStart, shiftEnd }) => acc + getShiftDuration(shiftStart, shiftEnd), 0);
 };
 
-export const eventReport = () => {};
+export const eventReport = (events, signups) => {
+    const sorted = events.sort((left, right) => moment.utc(left.start).diff(moment.utc(right.start)));
+
+    const titles = sorted.map(({ title }) => title);
+    const times = sorted
+        .map(({ start, end }) => [start, end]
+        .map((time) => moment(time).format('MM/DD/YY hh:mm A'))
+        .join(' - '));
+    const volunteered = sorted
+        .map((event) => getSignupsForEvent(event, signups)
+            .map((signup) => getShiftDuration(signup.shiftStart, signup.shiftEnd))
+            .reduce((acc, time) => acc + time, 0));
+    const slots = sorted.map(getSlotsForEvent);
+    const unfilled = sorted.map((event) => getSlotsForEvent(event) - getSignupsForEvent(event, signups).length);
+
+    return [
+        titles,
+        times,
+        volunteered,
+        slots,
+        unfilled
+    ];
+};
 
 export const hoursReport = (signups, events, users) => {
     const userHours = users.map((user) => ({ name: [user.firstName, user.lastName].join(' ') }));
