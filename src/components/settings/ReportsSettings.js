@@ -26,7 +26,7 @@ const ReportsSettings = (props) => {
       'Hours Volunteered': hoursReport(eventSignups, events, users),
       Events: eventReport(events, eventSignups),
       Birthdays: birthdaysReport(users),
-      'Shirt Sizes': shirtSizesReport(),
+      'Shirt Sizes': shirtSizesReport(users),
   };
 
   const handleReportChange = (event) => {

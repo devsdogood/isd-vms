@@ -14,4 +14,14 @@ export const birthdaysReport = (users) => {
     ];
 };
 
-export const shirtSizesReport = () => {};
+export const shirtSizesReport = (users) => {
+    const shirtSizes = users.map((user) => [
+        getFullName(user),
+        user.shirtSize,
+    ]);
+
+    return [
+        ['Name', 'Shirt Size'],
+        ...shirtSizes
+    ];
+};
