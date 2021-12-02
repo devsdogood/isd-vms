@@ -35,12 +35,19 @@ export const eventReport = (events, signups) => {
     const slots = sorted.map(getSlotsForEvent);
     const unfilled = sorted.map((event) => getSlotsForEvent(event) - getSignupsForEvent(event, signups).length);
 
-    return [
+    const eventDetails = [
         titles,
         times,
         volunteered,
         slots,
-        unfilled
+        unfilled,
+    ];
+
+    const columns = eventDetails[0].map((_, col) => eventDetails.map((row) => row[col]));
+
+    return [
+        ['Event Title', 'Event Timeframe', 'Minutes Volunteered', 'Slots Available', 'Slots Unfilled'],
+        ...columns,
     ];
 };
 
