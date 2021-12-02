@@ -9,6 +9,7 @@ import { useDocumentData } from 'react-firebase-hooks/firestore';
 import GlobalStyles from './components/GlobalStyles';
 import theme from './theme';
 import routes from './routes';
+import NotAllowed from './pages/NotAllowed';
 
 /* Firebase */
 const config = {
@@ -22,13 +23,15 @@ const App = () => {
   const [user, userLoading] = useAuthState(firebase.auth());
   const [userData, userDataLoading] = useDocumentData(!userLoading && user !== null ? firebase.firestore().collection('users').doc(user.uid) : null);
   const content = useRoutes(userLoading ? [] : routes(user, userData));
+  const userNotAuthorized = !userDataLoading && userData && !userData?.active;
   const displayContent = !userLoading && !userDataLoading && userData;
 
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
-        {(displayContent || user === null)
+        {userNotAuthorized && <NotAllowed />}
+        {!userNotAuthorized && (displayContent || user === null)
          && content}
       </ThemeProvider>
     </StyledEngineProvider>
