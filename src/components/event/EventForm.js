@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import moment from 'moment';
 import { useFormik, FormikProvider } from 'formik';
 import {
@@ -25,6 +25,7 @@ import { firebase } from '../../App';
 const EventForm = ({ event }) => {
   const { roles: contextRoles } = useContext(DashboardContext);
   const roles = getEventRoles(contextRoles, event.eventID);
+  const [docId] = useState(firebase.firestore().collection('events').doc(event.eventID).id);
 
   const navigate = useNavigate();
   const dateFormat = 'yyyy-MM-DDTHH:mm';
@@ -39,7 +40,7 @@ const EventForm = ({ event }) => {
         shiftStart: formatEvent(role.shiftStart || event?.start),
         shiftEnd: formatEvent(role.shiftEnd || event?.end),
         slots: role.slots,
-      }));
+      })) || [];
 
       return {
         ...event,
@@ -63,7 +64,7 @@ const EventForm = ({ event }) => {
       };
 
       try {
-        await firebase.firestore().collection('events').doc(values.eventID).set(firestoreVals);
+        await firebase.firestore().collection('events').doc(docId).set(firestoreVals);
 
         if (!event.eventID) navigate('/app/events/');
       } catch (err) {
@@ -80,7 +81,7 @@ const EventForm = ({ event }) => {
       const roleData = {
         title: option,
         deleted: false,
-        event: event.eventID,
+        event: docId,
       };
 
       const doc = await firebase.firestore().collection('roles').add(roleData);
