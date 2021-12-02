@@ -1,0 +1,59 @@
+// Check if user is admin
+function isAdmin(database, uID) {
+     return get(/databases/$(database)/documents/users/$(uID)).data.isAdmin == true;
+}
+
+// Validate user is on event signup
+function volunteerOnSignup(database, signup, userID) {
+	return get(/databases/$(database)/documents/eventSignups/$(signup)).data.volunteer == userID;
+}
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	match /admins/{admin} {
+    	// Only allow admins to create and read admins
+      allow read: if isAdmin(database, request.auth.uid);
+      allow write: if isAdmin(database, request.auth.uid);
+    }
+    
+    match /users/{user} {
+    	// Allow users to read and update their own documents
+      allow read: if request.auth.uid == user
+      allow write: if request.auth.uid == user &&
+      request.resource.data.isAdmin == resource.data.isAdmin;
+      
+      // Allow admins to read and write user documents
+      allow read, write: if isAdmin(database, request.auth.uid);
+    }
+    
+    match /adminUserData/{user} {
+      // Allow admins to read and write additional user data
+      allow read, write: if isAdmin(database, request.auth.uid);
+    }
+    
+    match /events/{event} {
+      // Allow admins to read and write to events
+      allow read, write: if isAdmin(database, request.auth.uid);
+      
+      // Allow volunteers to read events
+      allow read: if request.auth != null;
+    }
+    
+    match /eventSignups/{signup} {
+    	// Allow admins to read and write to event signups
+      allow read, write: if isAdmin(database, request.auth.uid);
+      
+      // Allow volunteers to read their own signups
+      allow read: if true; // volunteerOnSignup(database, signup, request.auth.uid);
+      allow write: if request.resource.data.volunteer == request.auth.uid;
+    }
+    
+    match /roles/{role} {
+      // Allow admins to read and write to roles
+      allow read, write: if isAdmin(database, request.auth.uid);
+      
+      // Allow volunteers to read roles
+      allow read: if request.auth != null;
+    }
+  }
+}
