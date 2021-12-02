@@ -11,8 +11,13 @@ import {
   Users as UsersIcon,
   MapPin as MapPinIcon
 } from 'react-feather';
+import { useContext } from 'react';
+import { DashboardContext } from '../DashboardLayout';
 
 const EventCard = ({ event, ...rest }) => {
+  const { roles: contextRoles } = useContext(DashboardContext);
+  const roles = event.roles.map((r) => contextRoles.find((cr) => cr.roleID === r.role.id));
+
   const dateOptions = {
     day: 'numeric',
     month: 'numeric',
@@ -106,7 +111,11 @@ const EventCard = ({ event, ...rest }) => {
             >
               {event.roles.reduce((val, role) => val + role.slots, 0)}
               {' '}
-              Slots
+              slots
+              {' '}
+              {roles.length > 0 && 'for'}
+              {' '}
+              {roles.map((role) => role.title).join(', ')}
             </Typography>
           </Grid>
         </Grid>
