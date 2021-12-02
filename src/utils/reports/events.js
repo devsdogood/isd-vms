@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { getFullName } from './users';
 
 const getSignupsForEvent = (event, signups) => signups.filter(
     (signup) => signup.event === event.eventID
@@ -52,7 +53,7 @@ export const eventReport = (events, signups) => {
 };
 
 export const hoursReport = (signups, events, users) => {
-    const userHours = users.map((user) => ({ name: [user.firstName, user.lastName].join(' ') }));
+    const userHours = users.map((user) => ({ name: getFullName(user) }));
 
     const start = moment('2021-11-1');
     const end = moment().endOf('month');
@@ -64,7 +65,7 @@ export const hoursReport = (signups, events, users) => {
 
         users.forEach((user) => {
             const time = getMinutesOverTime(curr, next, user, signups, events);
-            const fullName = [user.firstName, user.lastName].join(' ');
+            const fullName = getFullName(user);
             const userHoursItem = userHours.find((uh) => uh.name === fullName);
 
             userHoursItem[curr.format('MM-yyyy')] = time;

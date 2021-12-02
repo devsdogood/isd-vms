@@ -25,7 +25,7 @@ const ReportsSettings = (props) => {
   const REPORT_TYPE_MAP = {
       'Hours Volunteered': hoursReport(eventSignups, events, users),
       Events: eventReport(events, eventSignups),
-      Birthdays: birthdaysReport(),
+      Birthdays: birthdaysReport(users),
       'Shirt Sizes': shirtSizesReport(),
   };
 
