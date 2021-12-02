@@ -26,7 +26,7 @@ const routes = (isLoggedIn, userData) => [
       { path: 'events', element: <EventList /> },
       { path: 'events/:event', element: userData?.isAdmin ? <AdminEventView /> : <VolunteerEventView /> },
       { path: 'events/new', element: <NewEvent /> },
-      { path: 'reports', element: <Settings /> },
+      { path: 'settings', element: <Settings /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

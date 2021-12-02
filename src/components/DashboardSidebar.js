@@ -44,9 +44,9 @@ const adminItems = [
     title: 'Users'
   },
   {
-    href: '/app/reports',
+    href: '/app/settings',
     icon: SettingsIcon,
-    title: 'Reports'
+    title: 'Settings'
   },
 ];
 
