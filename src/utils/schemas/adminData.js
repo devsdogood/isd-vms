@@ -1,15 +1,14 @@
 import * as Yup from 'yup';
 
 export const trainings = {
-  CanineCamp: 'Canine Camp',
-  ExpectationsAssessment: 'Expectations Assessment',
-  ExpectationsWebinar: 'Expectations Webinar',
-  HouseVisits: 'House Visits',
-  Observation1: 'Observation 1',
-  Observation2: 'Observation 2',
-  Observation3: 'Observation 3',
   Orientation: 'Orientation',
-  TrainingCourse: 'Training Course',
+  DogTrainingLecture: 'Dog Training Lecture',
+  HomeVisit: 'Home Visit',
+  BodyLanguageWebinarAssessment: 'Body Language Webinar Assessment',
+  BasicCareWebinarAssessment: 'Basic Care Webinar Assessment',
+  Observation1: 'Observation/Mentor Outing 1',
+  Observation2: 'Observation/Mentor Outing 2',
+  Observation3: 'Observation/Mentor Outing 3',
 };
 
 const adminDataSchema = Yup.object().shape({
