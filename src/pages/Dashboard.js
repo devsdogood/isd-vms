@@ -5,6 +5,7 @@ import {
 } from '@material-ui/core';
 import EventCalendar from 'src/components/dashboard/Calendar';
 import { DashboardContext } from 'src/components/DashboardLayout';
+import RecentUsers from 'src/components/dashboard/RecentUsers';
 import RecentRegistrations from '../components/dashboard/RecentRegistrations';
 
 const Dashboard = () => {
@@ -41,6 +42,8 @@ const Dashboard = () => {
               xs={12}
             >
               {userData.isAdmin && <RecentRegistrations />}
+              <br />
+              {userData.isAdmin && <RecentUsers />}
             </Grid>
           </Grid>
         </Container>
