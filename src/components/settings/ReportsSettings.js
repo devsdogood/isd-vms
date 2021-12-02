@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState, useRef } from 'react';
 import {
   Box,
   Button,
@@ -13,19 +13,27 @@ import {
 } from '@material-ui/core';
 import { eventReport, hoursReport } from 'src/utils/reports/events';
 import { birthdaysReport, shirtSizesReport } from 'src/utils/reports/users';
+import { CSVLink } from 'react-csv';
+import { DashboardContext } from '../DashboardLayout';
 
 const ReportsSettings = (props) => {
+  const { eventSignups, events, users } = useContext(DashboardContext);
+  const [reportType, setReportType] = useState(null);
+  const [reportData, setReportData] = useState([]);
+  const csvLink = useRef();
+
   const REPORT_TYPE_MAP = {
-      'Hours Volunteered': hoursReport(),
+      'Hours Volunteered': hoursReport(eventSignups, events, users),
       Events: eventReport(),
       Birthdays: birthdaysReport(),
       'Shirt Sizes': shirtSizesReport(),
   };
 
-  const [reportType, setReportType] = useState(null);
+  const handleReportChange = (event) => {
+    const report = event.target.value;
 
-  const downloadReport = () => {
-    console.log(REPORT_TYPE_MAP[reportType]);
+    setReportType(report);
+    setReportData(REPORT_TYPE_MAP[report]);
   };
 
   return (
@@ -44,7 +52,7 @@ const ReportsSettings = (props) => {
               id="report-type-select"
               value={reportType}
               label="Report Type"
-              onChange={(event) => setReportType(event.target.value)}
+              onChange={handleReportChange}
             >
               {Object.keys(REPORT_TYPE_MAP).map((type) => <MenuItem value={type}>{type}</MenuItem>)}
             </Select>
@@ -58,13 +66,19 @@ const ReportsSettings = (props) => {
             p: 2
           }}
         >
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={downloadReport}
+          <CSVLink
+            data={reportData}
+            filename="report.csv"
+            ref={csvLink}
+            target="_blank"
           >
-            Update
-          </Button>
+            <Button
+              color="primary"
+              variant="contained"
+            >
+              Update
+            </Button>
+          </CSVLink>
         </Box>
       </Card>
     </form>
