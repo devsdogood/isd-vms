@@ -95,12 +95,16 @@ const EventForm = ({ event }) => {
       merged = newRoles;
     }
 
-    merged = merged.map((role) => ({
-      ...role,
-      slots: formik.values.roles?.find((r) => roleToString(r) === roleToString(role))?.slots,
-      shiftStart: formatEvent(formik.values.start),
-      shiftEnd: formatEvent(formik.values.end),
-    }));
+    merged = merged.map((role) => {
+      const currRole = formik.values.roles?.find((r) => roleToString(r) === roleToString(role));
+
+      return {
+        ...role,
+        slots: currRole?.slots,
+        shiftStart: formatEvent(currRole?.shiftStart || formik.values.start),
+        shiftEnd: formatEvent(currRole?.shiftEnd || formik.values.end),
+      };
+    });
 
     formik.setFieldValue('roles', merged);
   };
