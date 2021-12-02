@@ -23,6 +23,8 @@ import {
 import { DashboardContext } from 'src/components/DashboardLayout';
 import { firebase } from 'src/App';
 
+export const roleToString = (role) => `${role.title} (${moment(role.shiftStart).format('hh:mm A')} - ${moment(role.shiftEnd).format('hh:mm A')})`;
+
 const EventDetails = ({ event }) => {
   const EVENT_STATUS = [
     {
@@ -101,8 +103,6 @@ const EventDetails = ({ event }) => {
       </Typography>
     </Grid>
   );
-
-  const roleToString = (role) => `${role.title} (${moment(role.shiftStart).format('hh:mm A')} - ${moment(role.shiftEnd).format('hh:mm A')})`;
 
   const handleAddRole = (e) => setCurrentRole(
     eventRoles.find((ev) => roleToString(ev) === e.target.value)

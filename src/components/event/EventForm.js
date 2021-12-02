@@ -21,6 +21,7 @@ import eventSchema from 'src/utils/schemas/event';
 import _ from 'lodash';
 import getEventRoles from 'src/utils/roles/getEventRoles';
 import { firebase } from '../../App';
+import { roleToString } from './EventDetails';
 
 const EventForm = ({ event }) => {
   const { roles: contextRoles } = useContext(DashboardContext);
@@ -96,7 +97,7 @@ const EventForm = ({ event }) => {
 
     merged = merged.map((role) => ({
       ...role,
-      slots: formik.values.roles?.find((r) => r.roleID === role.roleID)?.slots,
+      slots: formik.values.roles?.find((r) => roleToString(r) === roleToString(role))?.slots,
       shiftStart: formatEvent(formik.values.start),
       shiftEnd: formatEvent(formik.values.end),
     }));
