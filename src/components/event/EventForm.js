@@ -73,8 +73,27 @@ const EventForm = ({ event }) => {
     enableReinitialize: true,
   });
 
-  const addSlotsToRoles = (__, newRoles) => {
-    const merged = newRoles.map((role) => ({
+  const addSlotsToRoles = async (__, newRoles, action, { option }) => {
+    let merged;
+
+    if (action === 'createOption') {
+      const roleData = {
+        title: option,
+        deleted: false,
+        event: event.eventID,
+      };
+
+      const doc = await firebase.firestore().collection('roles').add(roleData);
+
+      merged = formik.values.roles.concat([{
+        roleID: doc.id,
+        ...roleData,
+      }]);
+    } else {
+      merged = newRoles;
+    }
+
+    merged = merged.map((role) => ({
       ...role,
       slots: formik.values.roles?.find((r) => r.roleID === role.roleID)?.slots,
       shiftStart: formatEvent(formik.values.start),
@@ -197,8 +216,9 @@ const EventForm = ({ event }) => {
             >
               <Autocomplete
                 multiple
-                options={roles}
+                options={_.unionBy(roles, formik.values.roles, 'roleID')}
                 getOptionLabel={(option) => option.title}
+                freeSolo
                 renderInput={(params) => (
                   <MuiTextField
                     {...params}
@@ -209,7 +229,7 @@ const EventForm = ({ event }) => {
                   />
                 )}
                 isOptionEqualToValue={() => false}
-                defaultValue={formik.values.roles}
+                value={formik.values.roles}
                 onChange={addSlotsToRoles}
               />
             </Grid>
