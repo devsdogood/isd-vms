@@ -35,6 +35,14 @@ const AdminDataDetails = ({ adminData, ...props }) => {
     roleID: r.id
   }));
 
+  const toggleActive = async () => {
+    await firebase.firestore().collection('users')
+      .doc(adminData.userID)
+      .set({
+        active: !props.active,
+      }, { merge: true });
+  };
+
   const formik = useFormik({
     initialValues: {
       ...adminData,
@@ -172,9 +180,19 @@ const AdminDataDetails = ({ adminData, ...props }) => {
           sx={{
             display: 'flex',
             justifyContent: 'flex-end',
-            p: 2
+            p: 2,
           }}
         >
+          <LoadingButton
+            color={props.active ? 'error' : 'success'}
+            variant="contained"
+            onClick={toggleActive}
+            style={{ marginRight: '1em' }}
+          >
+            {props.active ? 'deactivate' : 'activate'}
+            {' '}
+            account
+          </LoadingButton>
           <LoadingButton
             loading={formik.isSubmitting}
             color="primary"

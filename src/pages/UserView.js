@@ -80,6 +80,7 @@ const UserView = () => {
               >
                 <AdminDataDetails
                   adminData={adminData}
+                  active={user.active}
                 />
               </Grid>
               )}
