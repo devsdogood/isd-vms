@@ -4,9 +4,14 @@ import 'yup-phone';
 import states from '../data/states';
 
 export const shirtSizes = {
-  Small: 'small',
-  Medium: 'medium',
-  Large: 'large',
+  'X-small': 'X-small',
+  Small: 'Small',
+  Medium: 'Medium',
+  Large: 'Large',
+  'X-Large': 'X-Large',
+  '2x': '2x',
+  '3x': '3x',
+  '4x': '4x',
 };
 
 const userSchema = Yup.object().shape({
