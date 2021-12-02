@@ -76,7 +76,7 @@ const ReportsSettings = (props) => {
               color="primary"
               variant="contained"
             >
-              Update
+              Download
             </Button>
           </CSVLink>
         </Box>
