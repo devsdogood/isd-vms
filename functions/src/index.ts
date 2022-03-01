@@ -1,9 +1,17 @@
 import * as functions from "firebase-functions";
-import {getUserData} from "./users/utils";
-import {getEventData} from "./events/utils";
-import {sendMessage} from "./mailing/utils";
-import {admin} from "./utils";
+import {firestore} from "firebase-admin";
 import moment from "moment";
+import _ from "lodash";
+
+import {admin, DOMAIN} from "./utils";
+import {getUserData} from "./users/utils";
+import {getEventData, getRoleData} from "./events/utils";
+import {
+  eventDataProps,
+  sendMessage,
+  timeDisplayFormat,
+  templates,
+} from "./mailing/utils";
 
 // send email when user registers for an event
 export const registration = functions.firestore
@@ -12,11 +20,29 @@ export const registration = functions.firestore
       const data = snapshot.data();
       const userData = await getUserData(data.volunteer);
       const eventData = await getEventData(data.event);
+      const roleData = await getRoleData(data.role);
+
+      // get role user registered for from event data
+      const {shiftStart, shiftEnd} = eventData.roles.find(
+          ({role}: { role: firestore.DocumentReference }) =>
+            role.id === data.role
+      );
+
+      // context for Mailjet templating
+      const variables = {
+        ..._.pick(eventData, eventDataProps),
+        id: data.event,
+        role: roleData.title,
+        shiftStart: moment(shiftStart).format(timeDisplayFormat),
+        shiftEnd: moment(shiftEnd).format(timeDisplayFormat),
+        domain: DOMAIN,
+      };
 
       const messageSent = await sendMessage(
           userData.email,
           "You're Registered!",
-          `You've registered for ${eventData.title} event.`
+          templates.registration,
+          variables,
       );
 
       if (!messageSent) {
@@ -63,11 +89,29 @@ export const notification = functions.pubsub
         const signup = doc.data();
         const user = await getUserData(signup.volunteer);
         const event = await getEventData(signup.event);
+        const role = await getRoleData(signup.role);
+
+        // get role user registered for from event data
+        const {shiftStart, shiftEnd} = event.roles.find(
+            ({role}: { role: firestore.DocumentReference }) =>
+              role.id === signup.role
+        );
+
+        // context for Mailjet templating
+        const variables = {
+          ..._.pick(event, eventDataProps),
+          id: signup.event,
+          role: role.title,
+          shiftStart: moment(shiftStart).format(timeDisplayFormat),
+          shiftEnd: moment(shiftEnd).format(timeDisplayFormat),
+          domain: DOMAIN,
+        };
 
         const messageSent = await sendMessage(
             user.email,
             "Iowa Service Dogs Event Reminder",
-            `You've registered for ${event.title} event.`
+            templates.notification,
+            variables,
         );
 
         if (!messageSent) {

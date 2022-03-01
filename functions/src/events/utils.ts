@@ -8,3 +8,11 @@ export const getEventData =
     const data = await eventDoc.get();
     return data.data()!;
   };
+
+export const getRoleData =
+  async (roleId: string): Promise<firestore.DocumentData> => {
+    const roleDoc = admin.firestore().collection("roles").doc(roleId);
+
+    const data = await roleDoc.get();
+    return data.data()!;
+  };

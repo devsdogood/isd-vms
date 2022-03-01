@@ -1,10 +1,25 @@
 import {config} from "dotenv";
 import {connect} from "node-mailjet";
 
-const MESSAGE_FROM_EMAIL = "iowa-service-dogs-noreply@devsdogood.org";
+const MESSAGE_FROM_EMAIL = "noreply@devsdogood.org";
+
+export const templates = {
+  registration: 3690272,
+  notification: 3690635,
+};
+
+export const timeDisplayFormat = "h:mm:ss a";
+
+export const eventDataProps = [
+  "title",
+  "locationAddress",
+  "locationName",
+  "contact",
+  "description",
+];
 
 export const sendMessage = async (
-    to: string, subject: string, message: string, id?: string
+    to: string, subject: string, template: number, variables: any, id?: string
 ): Promise<boolean> => {
   // load Mailjet keys from .env
   config();
@@ -27,7 +42,9 @@ export const sendMessage = async (
             },
           ],
           Subject: subject,
-          TextPart: message,
+          TemplateID: template,
+          Variables: variables,
+          TemplateLanguage: true,
           CustomID: id,
         },
       ],
