@@ -18,9 +18,10 @@ service cloud.firestore {
     
     match /users/{user} {
     	// Allow users to read and update their own documents
+      // isAdmin may only be true if the user is already an admin
       allow read: if request.auth.uid == user
       allow write: if request.auth.uid == user &&
-      request.resource.data.isAdmin == resource.data.isAdmin;
+      (!request.resource.data.isAdmin || request.resource.data.isAdmin == resource.data.isAdmin);
       
       // Allow admins to read and write user documents
       allow read, write: if isAdmin(database, request.auth.uid);
