@@ -39,6 +39,8 @@ const Register = () => {
         isAdmin: false,
         active: false,
         userID: user.user.uid,
+        password: undefined,
+        confirmPassword: undefined,
       }, { merge: true });
 
       console.log('set doc');
