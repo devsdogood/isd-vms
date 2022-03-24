@@ -36,4 +36,10 @@ const userSchema = Yup.object().shape({
   shirtSize: Yup.string().oneOf(Object.values(shirtSizes)).required('Shirt size is required'),
 });
 
+export const userSchemaWithPassword = userSchema.concat(Yup.object().shape({
+  password: Yup.string().required('Password is required'),
+  confirmPassword: Yup.string()
+     .oneOf([Yup.ref('password'), null], 'Passwords must match')
+}));
+
 export default userSchema;
