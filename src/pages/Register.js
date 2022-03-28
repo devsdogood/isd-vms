@@ -20,18 +20,14 @@ const Register = () => {
     try {
       user = await firebase.auth().createUserWithEmailAndPassword(values.email, values.password);
     } catch (err) {
-      console.log(err);
       return setStatus({
         firebaseErr: err
       });
     }
 
-    console.log(user);
-
     const birthdate = moment(values.birthday, 'YYYY-MM-DD').toDate();
     const doc = firebase.firestore().collection('users').doc(user.user.uid);
 
-    console.log(doc);
     try {
       await doc.set({
         ...values,
@@ -42,11 +38,7 @@ const Register = () => {
         password: undefined,
         confirmPassword: undefined,
       }, { merge: true });
-
-      console.log('set doc');
     } catch (err) {
-      console.log(err);
-
       return setStatus({
         firebaseErr: err,
       });

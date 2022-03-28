@@ -12,7 +12,6 @@ const VolunteerEventView = () => {
   const { event: eventParam } = useParams();
   const { events } = useContext(DashboardContext);
   const event = events.find((e) => e.eventID === eventParam);
-  console.log(event);
 
   return (
     <Box
