@@ -12,13 +12,13 @@ import {
 } from '@material-ui/core';
 import { firebase } from 'src/App';
 
-const Login = () => {
+const ForgotPassword = () => {
   const navigate = useNavigate();
 
   return (
     <>
       <Helmet>
-        <title>Login | Iowa Service Dogs VMS</title>
+        <title>Forgot Password | Iowa Service Dogs VMS</title>
       </Helmet>
       <Box
         sx={{
@@ -33,22 +33,20 @@ const Login = () => {
           <Formik
             initialValues={{
               email: '',
-              password: ''
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-              password: Yup.string().max(255).required('Password is required')
+              email: Yup.string().email('Must be a valid email').max(255).required('Email is required')
             })}
             onSubmit={async (values, { setErrors }) => {
               try {
-                await firebase.auth().signInWithEmailAndPassword(values.email, values.password);
+                await firebase.auth().sendPasswordResetEmail(values.email);
               } catch (err) {
                 return setErrors({
                   email: err.message,
                 });
               }
 
-              return navigate('/app/dashboard', { replace: true });
+              return navigate('/app/login', { replace: true });
             }}
           >
             {({
@@ -66,14 +64,14 @@ const Login = () => {
                     color="textPrimary"
                     variant="h2"
                   >
-                    Sign in
+                    Password reset
                   </Typography>
                   <Typography
                     color="textSecondary"
                     gutterBottom
                     variant="body2"
                   >
-                    Sign in to the volunteer management system
+                    Send a password reset link
                   </Typography>
                 </Box>
                 <TextField
@@ -89,19 +87,6 @@ const Login = () => {
                   value={values.email}
                   variant="outlined"
                 />
-                <TextField
-                  error={Boolean(touched.password && errors.password)}
-                  fullWidth
-                  helperText={touched.password && errors.password}
-                  label="Password"
-                  margin="normal"
-                  name="password"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="password"
-                  value={values.password}
-                  variant="outlined"
-                />
                 <Box sx={{ py: 2 }}>
                   <Button
                     color="primary"
@@ -111,23 +96,17 @@ const Login = () => {
                     type="submit"
                     variant="contained"
                   >
-                    Sign in now
+                    Reset
                   </Button>
                 </Box>
                 <Typography
                   color="textSecondary"
                   variant="body1"
                 >
-                  Don&apos;t have an account?
+                  Ready to sign in?
                   {' '}
-                  <Link component={RouterLink} to="/register" variant="h6" underline="hover">
-                    Sign up
-                  </Link>
-                  <br />
-                  Forgot your password?
-                  {' '}
-                  <Link component={RouterLink} to="/forgotpassword" variant="h6" underline="hover">
-                    Send a reset link
+                  <Link component={RouterLink} to="/login" variant="h6" underline="hover">
+                    Log in
                   </Link>
                 </Typography>
               </form>
@@ -139,4 +118,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

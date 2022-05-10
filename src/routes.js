@@ -13,6 +13,7 @@ import NewEvent from './pages/NewEvent';
 import Register from './pages/Register';
 import Settings from './pages/Settings';
 import VolunteerEventView from './pages/VolunteerEventView';
+import ForgotPassword from './pages/ForgotPassword';
 
 const routes = (isLoggedIn, userData) => [
   {
@@ -36,6 +37,7 @@ const routes = (isLoggedIn, userData) => [
     children: [
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
+      { path: 'forgotpassword', element: <ForgotPassword /> },
       { path: '404', element: <NotFound /> },
       { path: '/', element: <Navigate to="/app/dashboard" /> },
       { path: '*', element: <Navigate to="/404" /> }
