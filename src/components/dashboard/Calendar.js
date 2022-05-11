@@ -39,6 +39,7 @@ const EventCalendar = ({ events }) => {
         onSelectEvent={eventOpened}
         views={['day', 'week', 'month']}
         eventPropGetter={(eventStyleGetter)}
+        style={{ height: '80vh' }}
       />
     </div>
   );
