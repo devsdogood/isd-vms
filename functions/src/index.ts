@@ -4,7 +4,7 @@ import moment from "moment";
 import _ from "lodash";
 
 import {admin, DOMAIN} from "./utils";
-import {getUserData} from "./users/utils";
+import {defaultAdminUserData, getUserData} from "./users/utils";
 import {getEventData, getRoleData} from "./events/utils";
 import {
   eventDataProps,
@@ -120,4 +120,18 @@ export const notification = functions.pubsub
       });
 
       await Promise.all(messages);
+    });
+
+// send emails to user and admins on user registration
+// also create user admin document
+export const userRegistration = functions.firestore
+    .document("users/{docId}")
+    .onCreate(async (snapshot) => {
+      await admin
+          .firestore()
+          .collection("adminUserData")
+          .doc(snapshot.id)
+          .set(defaultAdminUserData);
+
+      // TODO: send email
     });

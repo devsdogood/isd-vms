@@ -8,3 +8,21 @@ export const getUserData =
     const data = await userDoc.get();
     return data.data()!;
   };
+
+export const defaultAdminUserData = {
+  deleted: false,
+  verified: false,
+  volunteerApplication: null,
+  liabilityWaiver: null,
+  roles: [],
+  trainings: {
+    Orientation: false,
+    DogTrainingLecture: false,
+    HomeVisit: false,
+    BodyLanguageWebinarAssessment: false,
+    BasicCareWebinarAssessment: false,
+    Observation1: false,
+    Observation2: false,
+    Observation3: false,
+  },
+};

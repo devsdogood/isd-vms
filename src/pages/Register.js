@@ -9,6 +9,7 @@ import {
 import { LoadingButton } from '@material-ui/lab';
 import moment from 'moment';
 import firebase from 'firebase';
+import * as _ from 'lodash';
 import { userSchemaWithPassword } from '../utils/schemas/user';
 import AccountForm from '../components/account/AccountForm';
 
@@ -29,14 +30,14 @@ const Register = () => {
     const doc = firebase.firestore().collection('users').doc(user.user.uid);
 
     try {
+      const filtered = _.omit(values, ['password', 'confirmPassword']);
+
       await doc.set({
-        ...values,
+        ...filtered,
         birthday: birthdate,
         isAdmin: false,
         active: false,
-        userID: user.user.uid,
-        password: undefined,
-        confirmPassword: undefined,
+        userID: user.user.uid
       }, { merge: true });
     } catch (err) {
       return setStatus({
