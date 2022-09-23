@@ -26,7 +26,7 @@ const NotAllowed = () => (
           color="textPrimary"
           variant="h1"
         >
-          Your account doesn&apos;t have access to this page
+          Thanks for signing up! Your account doesn&apos;t have access to this page yet.
         </Typography>
         <br />
         <Typography
