@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import {
@@ -7,11 +7,19 @@ import {
   Grid
 } from '@material-ui/core';
 import { DashboardContext } from 'src/components/DashboardLayout';
+import * as _ from 'lodash';
 import EventListToolbar from '../components/event/EventListToolbar';
 import EventCard from '../components/event/EventCard';
 
 const EventList = () => {
-  const { events } = useContext(DashboardContext);
+  let { events } = useContext(DashboardContext);
+  const [showPast, setShowPast] = useState(false);
+
+  events = _.orderBy(events, ['start'], ['desc']);
+  if (!showPast) {
+    // filter events that started before current date
+    events = events.filter((e) => new Date(e.start) > new Date());
+  }
 
   return (
     <>
@@ -26,7 +34,10 @@ const EventList = () => {
         }}
       >
         <Container maxWidth={false}>
-          <EventListToolbar />
+          <EventListToolbar
+            checked={showPast}
+            handleChange={setShowPast}
+          />
           <Box sx={{ pt: 3 }}>
             <Grid
               container
