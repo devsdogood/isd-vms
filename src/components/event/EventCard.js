@@ -16,7 +16,9 @@ import { DashboardContext } from '../DashboardLayout';
 
 const EventCard = ({ event, ...rest }) => {
   const { roles: contextRoles } = useContext(DashboardContext);
-  const roles = event.roles.map((r) => contextRoles.find((cr) => cr.roleID === r.role.id));
+  const roles = event.roles.map((r) => contextRoles
+    .find((cr) => cr.roleID === r.role.id))
+    .filter((r) => r !== undefined);
 
   const dateOptions = {
     day: 'numeric',
