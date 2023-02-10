@@ -83,7 +83,7 @@ const RecentRegistrations = ({ ...props }) => {
                     {getRole(signup).title}
                   </TableCell>
                   <TableCell>
-                    {moment(signup.registered).format('MM/DD/YYYY')}
+                    {moment(signup.registered).format('MM/DD/YYYY h:mm a')}
                   </TableCell>
                   <TableCell>
                     <Box mr={2} display="inline">
