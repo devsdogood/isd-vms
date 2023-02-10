@@ -14,6 +14,10 @@ const getMinutesOverTime = (start, end, user, signups, events) => {
         .filter((signup) => {
             const event = events.find((ev) => ev.eventID === signup.event);
 
+            if (!event) {
+                return false;
+            }
+
             return moment(event.start) > start && moment(event.end) < end;
         })
         .filter((signup) => signup.volunteer === user.userID);
