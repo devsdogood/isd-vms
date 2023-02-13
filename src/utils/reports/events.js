@@ -56,6 +56,39 @@ export const eventReport = (events, signups) => {
     ];
 };
 
+export const singleEventReport = (event, roles, signups, users) => {
+    // largest number of slots available
+    const maxSlots = Math.max(...event.roles.map((role) => role.slots));
+
+    // dirty method for filtering signup shifts
+    const getSignupsForShift = (role) => signups.filter((signup) => signup.role === role.role.id && signup.shiftStart === role.shiftStart && signup.shiftEnd === role.shiftEnd);
+
+    const format = (date) => moment(date).format('h:mm a');
+
+    const getShiftTitle = (shift) => {
+        const { title } = roles.find((r) => r.roleID === shift.role.id);
+        return `${title} ${format(shift.shiftStart)} - ${format(shift.shiftEnd)} (${shift.slots})`;
+    };
+
+    // split event signups based on role
+    const signupsByRole = event.roles.reduce((acc, role) => {
+        const shiftSignups = getSignupsForShift(role).map((shift) => getFullName(users.find((user) => user.userID === shift.volunteer)));
+        const shiftTitle = getShiftTitle(role);
+
+        acc[shiftTitle] = [...shiftSignups, ...Array.from({ length: maxSlots - shiftSignups.length }, () => '')];
+        return acc;
+    }, {});
+
+    // group signups into rows for CSV
+    const values = Object.values(signupsByRole);
+    const rows = Array.from({ length: values[0].length }, (_, i) => values.map((val) => val[i]));
+
+    return [
+        Object.keys(signupsByRole),
+        ...rows,
+    ];
+};
+
 export const hoursReport = (signups, events, users) => {
     const userHours = users.map((user) => ({ name: getFullName(user) }));
 

@@ -2,9 +2,10 @@ import {
   TableRow,
   TableCell
 } from '@material-ui/core';
+import moment from 'moment';
 
 const VolunteerRow = ({
-  user, role, registered, actionButton, registrationID
+  user, signup, role, registered, actionButton, registrationID
 }) => (
   <TableRow
     hover
@@ -15,6 +16,14 @@ const VolunteerRow = ({
     </TableCell>
     <TableCell>
       {role.title}
+      {' '}
+      from
+      {' '}
+      {moment(signup.shiftStart).format('h:mm a')}
+      {' '}
+      to
+      {' '}
+      {moment(signup.shiftEnd).format('h:mm a')}
     </TableCell>
     <TableCell>
       {registered}
