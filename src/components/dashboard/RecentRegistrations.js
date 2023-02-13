@@ -81,6 +81,14 @@ const RecentRegistrations = ({ ...props }) => {
                   </TableCell>
                   <TableCell>
                     {getRole(signup).title}
+                    {' '}
+                    from
+                    {' '}
+                    {moment(signup.shiftStart).format('h:mm a')}
+                    {' '}
+                    to
+                    {' '}
+                    {moment(signup.shiftEnd).format('h:mm a')}
                   </TableCell>
                   <TableCell>
                     {moment(signup.registered).format('MM/DD/YYYY h:mm a')}
